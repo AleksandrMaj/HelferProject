@@ -54,9 +54,9 @@ public class AnmeldenMB
         Client client = ClientBuilder.newClient();
         WebTarget request = client.target(Environment.BASE + "/login");
 
-        Map<String, String> loginRequest = new HashMap<>();
-        loginRequest.put("username", username);
-        loginRequest.put("password", password);
+        Benutzer loginRequest = new Benutzer();
+        loginRequest.setEmail(username);
+        loginRequest.setPasswort(password);
 
         Response response = request
                 .request(MediaType.APPLICATION_JSON)

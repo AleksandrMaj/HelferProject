@@ -86,7 +86,7 @@
 <h:body>
     <h:form>
         <div class="login-container">
-            <h2>My Website</h2>
+            <h2>EventMaster</h2>
             <h3>Login</h3>
             <h:inputText id="username" value="#{anmeldenMB.username}">
                 <f:passThroughAttribute name="placeholder" value="E-Mail" />
@@ -94,8 +94,8 @@
             <h:inputSecret id="password" value="#{anmeldenMB.password}">
                 <f:passThroughAttribute name="placeholder" value="Passwort" />
             </h:inputSecret>
-            <h:commandButton value="Login" action="#{anmeldenMB.login}" styleClass="login-button" />
-            <h:commandButton value="Register" action="register.xhtml?faces-redirect=true" styleClass="register-button" />
+            <h:commandButton value="Einloggen" action="#{anmeldenMB.login}" styleClass="login-button" />
+            <h:commandButton value="Neues Konto anlegen" action="register.xhtml?faces-redirect=true" styleClass="register-button" />
             <h:messages globalOnly="true" styleClass="error-message" />
         </div>
     </h:form>
