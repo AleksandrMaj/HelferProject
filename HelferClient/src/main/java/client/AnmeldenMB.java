@@ -52,7 +52,7 @@ public class AnmeldenMB
     public String login()
     {
         Client client = ClientBuilder.newClient();
-        WebTarget request = client.target(Environment.BASE + "/login");
+        WebTarget request = client.target(Environment.BASE + "/auth/login");
 
         Benutzer loginRequest = new Benutzer();
         loginRequest.setEmail(username);

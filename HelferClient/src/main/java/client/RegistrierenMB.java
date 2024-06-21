@@ -72,7 +72,7 @@ public class RegistrierenMB
     // Register method
     public String register() {
         Client client = ClientBuilder.newClient();
-        WebTarget request = client.target(Environment.BASE + "/register");
+        WebTarget request = client.target(Environment.BASE + "/auth/register");
 
         // Create a Benutzer object for the JSON request body
         Benutzer newUser = new Benutzer();

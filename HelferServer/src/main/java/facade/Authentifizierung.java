@@ -1,40 +1,49 @@
 package facade;
 
 import core.entities.Benutzer;
+import core.enums.Benutzergruppe;
 import core.usecases.BenutzerManager;
+import core.usecases.IAnmelden;
+import core.usecases.IRegistrieren;
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import core.enums.Benutzergruppe;
 
-@Path("/")
-public class Registrieren {
-    @EJB
-    private BenutzerManager benutzerManager;
+@Path("/auth")
+public class Authentifizierung
+{
+    @EJB private IAnmelden anmelden;
+    @EJB private IRegistrieren registrieren;
+
+    @POST
+    @Path("/login")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(Benutzer user) {
+        Benutzer benutzer = anmelden.einloggen(user);
+
+        if (benutzer != null) {
+            return Response.status(Response.Status.OK).entity(benutzer).type(MediaType.APPLICATION_JSON).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).entity("E-Mail oder Passwort falsch").type(MediaType.TEXT_PLAIN).build();
+    }
 
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(Benutzer user) {
+    public Response register(Benutzer newBenutzer) {
         try {
-            // Set default values or perform additional logic
-            user.setBenutzergruppe(Benutzergruppe.MITGLIED); // Set default user group if needed
-
-            //TODO: Check so that no E-Mail is getting used twice
-
-            // Save the user using benutzerDAO
-            benutzerManager.addBenutzer(user);
+            Benutzer benutzer = registrieren.neuenBenutzerRegistrieren(newBenutzer);
 
             // Return a success response
             return Response.status(Response.Status.CREATED)
-                    .entity(user)
+                    .entity(benutzer)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         } catch (Exception e) {
