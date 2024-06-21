@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Registration</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+        .registration-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 650px;
+            text-align: left;
+        }
+        .registration-container h2 {
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+        .registration-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .registration-container label {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        .registration-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .registration-container input[type='submit'] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .registration-container input[type='submit']:hover {
+            background-color: #218838;
+        }
+        .registration-container .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            font-size: 14px;
+            list-style-type: none;
+            width: calc(100% - 20px);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-grid .full-width {
+            grid-column: span 2;
+            text-align: center;
+        }
+    </style>
+</h:head>
+<h:body>
+    <h:form>
+        <div class="registration-container">
+            <h2>My Website</h2>
+            <h3>Register</h3>
+            <div class="form-grid">
+                <div>
+                    <label for="vorname">First Name:</label>
+                    <h:inputText id="vorname" value="#{registrieren.vorname}" />
+                </div>
+                <div>
+                    <label for="name">Name:</label>
+                    <h:inputText id="name" value="#{registrieren.name}" />
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <h:inputText id="email" value="#{registrieren.email}" />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <h:inputSecret id="password" value="#{registrieren.password}" />
+                </div>
+                <div>
+                    <label for="strasse">Street:</label>
+                    <h:inputText id="strasse" value="#{registrieren.adresse.strasse}" />
+                </div>
+                <div>
+                    <label for="hausnummer">House Number:</label>
+                    <h:inputText id="hausnummer" value="#{registrieren.adresse.hausnummer}" />
+                </div>
+                <div>
+                    <label for="stadt">City:</label>
+                    <h:inputText id="stadt" value="#{registrieren.adresse.stadt}" />
+                </div>
+                <div>
+                    <label for="plz">Postal Code:</label>
+                    <h:inputText id="plz" value="#{registrieren.adresse.plz}" />
+                </div>
+                <div class="full-width">
+                    <h:commandButton value="Register" action="#{registrieren.register}" styleClass="register-button" />
+                </div>
+            </div>
+            <h:messages globalOnly="true" styleClass="error-message" />
+        </div>
+    </h:form>
+</h:body>
+</html>
