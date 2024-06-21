@@ -86,7 +86,7 @@ public class RegistrierenMB
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(newUser), Response.class);
 
-        if (response.getStatus() == 200) {
+        if (response.getStatus() == 201) {
             // Assuming the response contains a JSON object with user details
             Benutzer registeredUser = response.readEntity(Benutzer.class);
             // Optionally, store the user information or perform other actions
@@ -94,7 +94,7 @@ public class RegistrierenMB
             return "login?faces-redirect=true";
         }
 
-        if (response.getStatus() != 200){
+        if (response.getStatus() != 201){
             // Handle registration failure
             String errorMessage = "Registrierung fehlgeschlagen";
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));

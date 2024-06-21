@@ -17,6 +17,9 @@ public class BenutzerManager
         return benutzerDAO.suchen(username, password);
     }
 
+    public void addBenutzer(Benutzer newBenutzer) {
+        benutzerDAO.save(newBenutzer);
+    }
 
     //TODO: Implement
     public void getHelferEventsFromBenutzer(int eventID) {
