@@ -88,9 +88,13 @@
         <div class="login-container">
             <h2>My Website</h2>
             <h3>Login</h3>
-            <h:inputText id="username" value="#{anmelden.username}" placeholder="Username" />
-            <h:inputSecret id="password" value="#{anmelden.password}" placeholder="Password" />
-            <h:commandButton value="Login" action="#{anmelden.login}" styleClass="login-button" />
+            <h:inputText id="username" value="#{anmeldenMB.username}">
+                <f:passThroughAttribute name="placeholder" value="E-Mail" />
+            </h:inputText>
+            <h:inputSecret id="password" value="#{anmeldenMB.password}">
+                <f:passThroughAttribute name="placeholder" value="Passwort" />
+            </h:inputSecret>
+            <h:commandButton value="Login" action="#{anmeldenMB.login}" styleClass="login-button" />
             <h:commandButton value="Register" action="register.xhtml?faces-redirect=true" styleClass="register-button" />
             <h:messages globalOnly="true" styleClass="error-message" />
         </div>
