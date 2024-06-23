@@ -1,95 +1,23 @@
 package core.usecases;
 
-import core.entities.Adresse;
 import core.entities.Benutzer;
 import core.enums.Benutzergruppe;
-import dataaccess.BenutzerDAO;
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
+import jakarta.ejb.Stateless;
 
-@Named
-@RequestScoped
-public class Registrieren {
-
-    private String vorname;
-    private String name;
-    private String email;
-    private String password;
-    private final Adresse adresse = new Adresse();
-
+@Stateless
+public class Registrieren implements IRegistrieren {
     @EJB
-    private BenutzerDAO benutzerDAO;
+    private BenutzerManager benutzerManager;
 
-    // Getters and setters
-
-    public String getVorname()
+    @Override
+    public Benutzer neuenBenutzerRegistrieren(Benutzer benutzer)
     {
-        return vorname;
-    }
+        benutzer.setBenutzergruppe(Benutzergruppe.MITGLIED); // Set default user group if needed
 
-    public void setVorname(String vorname)
-    {
-        this.vorname = vorname;
-    }
+        //TODO: Check so that no E-Mail is getting used twice
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public Adresse getAdresse()
-    {
-        return adresse;
-    }
-
-    public BenutzerDAO getBenutzerDAO()
-    {
-        return benutzerDAO;
-    }
-
-    public void setBenutzerDAO(BenutzerDAO benutzerDAO)
-    {
-        this.benutzerDAO = benutzerDAO;
-    }
-
-    public String register() {
-        Benutzer benutzer = new Benutzer();
-        benutzer.setVorname(vorname);
-        benutzer.setName(name);
-        benutzer.setEmail(email);
-        benutzer.setPasswort(password);
-        benutzer.setAdresse(adresse);
-        benutzer.setBenutzergruppe(Benutzergruppe.MITGLIED); // Set default group
-
-        // Save the user using DAO
-        benutzerDAO.save(benutzer);
-
-        return "login.xhtml?faces-redirect=true"; // Redirect to login page
+        benutzerManager.addBenutzer(benutzer);
+        return benutzer;
     }
 }
