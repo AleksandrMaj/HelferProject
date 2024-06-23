@@ -1,12 +1,16 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import dataaccess.EventDAO;
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
 @Stateless
 public class EventManager
 {
     //TODO: Add eventDAO
+    @EJB
+    private EventDAO eventDAO;
 
     public void addHelfer(int eventID, int benutzerID) {
         /*entityManager.getTransaction().begin();
