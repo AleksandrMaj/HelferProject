@@ -46,7 +46,8 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        .registration-container input[type='submit'] {
+        .registration-container .register-button,
+        .registration-container .back-button {
             width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
@@ -54,15 +55,25 @@
             border-radius: 5px;
             font-size: 16px;
             transition: background-color 0.3s, transform 0.3s;
-            background-color: #28a745;
-            color: white;
             cursor: pointer;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            text-align: center;
         }
-        .registration-container input[type='submit']:hover {
+        .registration-container .register-button {
+            background-color: #28a745;
+            color: white;
+        }
+        .registration-container .register-button:hover {
             background-color: #218838;
+        }
+        .registration-container .back-button {
+            color: #007bff;
+            background: transparent;
+        }
+        .registration-container .back-button:hover {
+            text-decoration: underline;
         }
         .registration-container .error-message {
             color: #dc3545;
@@ -74,7 +85,11 @@
             border-radius: 5px;
             font-size: 14px;
             list-style-type: none;
-            width: calc(100% - 20px);
+            width: calc(100% - 60px);
+            display: flex;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
         }
         .form-grid {
             display: grid;
@@ -90,44 +105,47 @@
 <h:body>
     <h:form>
         <div class="registration-container">
-            <h2>My Website</h2>
-            <h3>Register</h3>
+            <h2>EventMaster</h2>
+            <h3>Registrierung</h3>
             <div class="form-grid">
                 <div>
                     <label for="vorname">First Name:</label>
-                    <h:inputText id="vorname" value="#{registrieren.vorname}" />
+                    <h:inputText id="vorname" value="#{registrierenMB.vorname}" />
                 </div>
                 <div>
                     <label for="name">Name:</label>
-                    <h:inputText id="name" value="#{registrieren.name}" />
+                    <h:inputText id="name" value="#{registrierenMB.name}" />
                 </div>
                 <div>
                     <label for="email">Email:</label>
-                    <h:inputText id="email" value="#{registrieren.email}" />
+                    <h:inputText id="email" value="#{registrierenMB.email}" />
                 </div>
                 <div>
                     <label for="password">Password:</label>
-                    <h:inputSecret id="password" value="#{registrieren.password}" />
+                    <h:inputSecret id="password" value="#{registrierenMB.password}" />
                 </div>
                 <div>
                     <label for="strasse">Street:</label>
-                    <h:inputText id="strasse" value="#{registrieren.adresse.strasse}" />
+                    <h:inputText id="strasse" value="#{registrierenMB.adresse.strasse}" />
                 </div>
                 <div>
                     <label for="hausnummer">House Number:</label>
-                    <h:inputText id="hausnummer" value="#{registrieren.adresse.hausnummer}" />
+                    <h:inputText id="hausnummer" value="#{registrierenMB.adresse.hausnummer}" />
                 </div>
                 <div>
                     <label for="stadt">City:</label>
-                    <h:inputText id="stadt" value="#{registrieren.adresse.stadt}" />
+                    <h:inputText id="stadt" value="#{registrierenMB.adresse.stadt}" />
                 </div>
                 <div>
                     <label for="plz">Postal Code:</label>
-                    <h:inputText id="plz" value="#{registrieren.adresse.plz}" />
+                    <h:inputText id="plz" value="#{registrierenMB.adresse.plz}" />
                 </div>
-                <div class="full-width">
-                    <h:commandButton value="Register" action="#{registrieren.register}" styleClass="register-button" />
-                </div>
+            </div>
+            <div class="full-width">
+                <h:commandButton value="Account anlegen" action="#{registrierenMB.register}" styleClass="register-button" />
+            </div>
+            <div class="full-width">
+                <h:commandButton value="Zurück zum Login" action="login.xhtml?faces-redirect=true" styleClass="back-button" />
             </div>
             <h:messages globalOnly="true" styleClass="error-message" />
         </div>
