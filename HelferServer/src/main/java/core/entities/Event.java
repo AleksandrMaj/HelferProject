@@ -1,8 +1,9 @@
 package core.entities;
 
 import core.enums.Benutzergruppe;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
+import core.entities.Helfer;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,12 +21,20 @@ public class Event implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    private Benutzergruppe organisator;
+    @ManyToMany
+    @JoinTable(
+            name = "Helfer",
+            joinColumns = @JoinColumn(name = "eventID"),
+            inverseJoinColumns = @JoinColumn(name = "benutzerID"))
+    private List<Benutzer> helferListe;
 
-    private List<Helfer> helfer;
+    @ManyToOne
+    @JoinColumn(name = "benutzerID")
+
+    private Benutzer organisator;
 
     public Event() {}
-    public Event(String name, Date date, Benutzergruppe organisator) {
+    public Event(String name, Date date, Benutzer organisator) {
         this.name = name;
         this.date = date;
         this.organisator = organisator;
@@ -44,13 +53,13 @@ public class Event implements Serializable {
 
     public void setTermin(Date termin) { this.date = termin; }
 
-    public Benutzergruppe getOrganisator() { return organisator; }
+    public Benutzer getOrganisator() { return organisator; }
 
-    public void setOrganisator(Benutzergruppe organisator) { this.organisator = organisator; }
+    public void setOrganisator(Benutzer organisator) { this.organisator = organisator; }
 
-    public List<Helfer> getHelfer() { return helfer; }
+    public List<Benutzer> getHelfer() { return helferListe; }
 
-    public void setHelfer(List<Helfer> helfer) { this.helfer = helfer;}
+    public void setHelfer(List<Benutzer> helferListe) { this.helferListe = helferListe;}
 
 
 

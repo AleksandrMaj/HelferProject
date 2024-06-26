@@ -1,14 +1,15 @@
 package dataaccess;
 
-import com.sun.tools.javac.comp.Todo;
-import core.entities.Event;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import core.entities.Event;
+import jakarta.ejb.Singleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
-@Stateless
+@Singleton
 public class EventDAO {
 
     @PersistenceContext
@@ -23,10 +24,9 @@ public class EventDAO {
         return em.find(Event.class, id);
     }
 
-    //Todo: Error? Blicke nicht genau durch warum hab nur so eine Ahnung
-    /*public List<Event> findAllEvents() {
+    public List<Event> findAllEvents() {
         return em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
-    }*/
+    }
 
     public Event updateEvent(Event event) {
         return em.merge(event);
