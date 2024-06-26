@@ -29,17 +29,9 @@ VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMI
 -- Create the table
 CREATE TABLE Helfer
 (
-    id         INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    mitgliedId INT NOT NULL,
-    eventId    INT NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_mitglied FOREIGN KEY (mitgliedId) REFERENCES Benutzer(id)
+    ID         INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    eventID    INT,
+    benutzerID INT,
+    FOREIGN KEY (eventID) REFERENCES Events (eventID),
+    FOREIGN KEY (benutzerID) REFERENCES Benutzer (benutzerID)
 );
-
--- Optionally, you can add indexes for the foreign keys if necessary
-CREATE INDEX idx_mitgliedId ON Helfer (mitgliedId);
-CREATE INDEX idx_eventId ON Helfer (eventId);
-
--- Insert sample data
--- INSERT INTO Helfer (mitgliedId, eventId) VALUES (1, 100);
--- INSERT INTO Helfer (mitgliedId, eventId) VALUES (2, 101);

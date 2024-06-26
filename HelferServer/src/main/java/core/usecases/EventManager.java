@@ -1,46 +1,27 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import dataaccess.HelferDAO;
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+
+import java.util.List;
 
 @Stateless
 public class EventManager
 {
-    //TODO: Add eventDAO
+    @EJB
+    HelferDAO helferDAO;
 
     public void addHelfer(int eventID, int benutzerID) {
-        /*entityManager.getTransaction().begin();
-        Benutzer benutzer = entityManager.find(Benutzer.class, benutzerID);
-        if (benutzer != null) {
-            Helfer helfer = new Helfer();
-            helfer.setEventId(eventID);
-            helfer.setMitglied(benutzer);
-            entityManager.persist(helfer);
-        } else {
-            System.out.println("Benutzer mit ID " + benutzerID + " nicht gefunden.");
-        }
-        entityManager.getTransaction().commit();*/
+        helferDAO.createBenutzerForEvent(eventID, benutzerID);
     }
 
     public void removeHelfer(int eventID, int benutzerID) {
-        /*entityManager.getTransaction().begin();
-        TypedQuery<Helfer> query = entityManager.createQuery(
-                "SELECT h FROM Helfer h WHERE h.eventId = :eventID AND h.mitglied.id = :benutzerID",
-                Helfer.class);
-        query.setParameter("eventID", eventID);
-        query.setParameter("benutzerID", benutzerID);
-
-        try {
-            Helfer helfer = query.getSingleResult();
-            entityManager.remove(helfer);
-        } catch (Exception e) {
-            System.out.println("Helfer nicht gefunden oder Fehler beim Löschen: " + e.getMessage());
-        }
-        entityManager.getTransaction().commit();*/
+        helferDAO.deleteBenutzerFromEvent(eventID, benutzerID);
     }
 
-    //TODO: Implement
-    public Benutzer[] getHelferFromEvent(int eventID) {
-        return new Benutzer[1];
+    public List<Benutzer> getHelferFromEvent(int eventID) {
+        return helferDAO.getAllHelferFromEvent(eventID);
     }
 }
