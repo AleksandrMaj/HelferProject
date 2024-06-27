@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "Event")
 public class EventEntity
 {
     @Id
@@ -23,15 +25,15 @@ public class EventEntity
             name = "Helfer",
             joinColumns = @JoinColumn(name = "eventID"),
             inverseJoinColumns = @JoinColumn(name = "benutzerID"))
-    private List<Benutzer> helferListe;
+    private List<BenutzerEntity> helferListe;
 
     @ManyToOne
     @JoinColumn(name = "benutzerID")
 
-    private Benutzer organisator;
+    private BenutzerEntity organisator;
 
     public EventEntity() {}
-    public EventEntity(String name, Date date, Benutzer organisator) {
+    public EventEntity(String name, Date date, BenutzerEntity organisator) {
         this.name = name;
         this.date = date;
         this.organisator = organisator;
@@ -41,38 +43,76 @@ public class EventEntity
         this.id = event.getId();
         this.name = event.getName();
         this.date = event.getDate();
-        this.helferListe = event.getHelferListe();
-        this.organisator = event.getOrganisator();
+        this.helferListe = event.getHelferListe().stream()
+                .map(BenutzerEntity::new)
+                .toList();
+        this.organisator = new BenutzerEntity(event.getOrganisator());
     }
 
     // Getter und Setter
-    public int getId() { return id; }
 
-    public void setId(int id) { this.id = id; }
+    public int getId()
+    {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public String getName()
+    {
+        return name;
+    }
 
-    public Date getTermin() { return date; }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-    public void setTermin(Date termin) { this.date = termin; }
+    public Date getDate()
+    {
+        return date;
+    }
 
-    public Benutzer getOrganisator() { return organisator; }
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
 
-    public void setOrganisator(Benutzer organisator) { this.organisator = organisator; }
+    public List<BenutzerEntity> getHelferListe()
+    {
+        return helferListe;
+    }
 
-    public List<Benutzer> getHelfer() { return helferListe; }
+    public void setHelferListe(List<BenutzerEntity> helferListe)
+    {
+        this.helferListe = helferListe;
+    }
 
-    public void setHelfer(List<Benutzer> helferListe) { this.helferListe = helferListe;}
+    public BenutzerEntity getOrganisator()
+    {
+        return organisator;
+    }
+
+    public void setOrganisator(BenutzerEntity organisator)
+    {
+        this.organisator = organisator;
+    }
 
     public Event toEvent() {
-        core.entities.Event event = new core.entities.Event();
+        Event event = new core.entities.Event();
         event.setId(this.id);
         event.setName(this.name);
         event.setDate(this.date);
-        event.setOrganisator(this.organisator);
-        event.setHelferListe(this.helferListe);
+        event.setOrganisator(this.organisator.toBenutzer());
+
+        List<Benutzer> userList = this.helferListe.stream()
+                .map(BenutzerEntity::toBenutzer)
+                .toList();
+
+        event.setHelferListe(userList);
         return event;
     }
 }

@@ -23,9 +23,9 @@ public class EventDAO
         return event;
     }
 
-    public List<Event> findAllEvents()
-    {
-        return em.createQuery("SELECT e FROM Event e", EventEntity.class).getResultList().stream().map(EventEntity::toEvent).toList();
+    public List<Event> findAllEvents() {
+        List<EventEntity> eventEntities = em.createQuery("SELECT e FROM EventEntity e", EventEntity.class).getResultList();
+        return eventEntities.stream().map(EventEntity::toEvent).toList();
     }
 
     public Event modifyEvent(Event event)
