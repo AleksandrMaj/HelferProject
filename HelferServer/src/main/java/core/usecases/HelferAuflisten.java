@@ -7,6 +7,8 @@ import jakarta.ejb.Stateless;
 
 import java.util.List;
 
+
+//TODO: When get is possible from orm, than there all can be removed
 @Stateless
 public class HelferAuflisten implements IHelferAuflisten
 {

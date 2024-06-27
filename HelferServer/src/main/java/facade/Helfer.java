@@ -4,6 +4,7 @@ import core.entities.Benutzer;
 import core.entities.Event;
 import core.usecases.IHelferAuflisten;
 import core.usecases.IHelferVerwalten;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -20,6 +21,7 @@ public class Helfer
     @GET
     @Path("/{eventID}")
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response getAllHelferFromEvent(@PathParam("eventID") int eventID) {
         try {
             List<Benutzer> benutzerList = helferAuflisten.getAllBenutzerFromEvent(eventID);
@@ -31,7 +33,7 @@ public class Helfer
 
     @GET
     @Path("/benutzer/{benutzerID}/events")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response getAllEventsFromBenutzer(@PathParam("benutzerID") int benutzerID) {
         try {
             List<Event> eventList = helferAuflisten.getAllEventsFromBenutzer(benutzerID);
@@ -43,8 +45,6 @@ public class Helfer
 
     @POST
     @Path("/{eventID}/{benutzerID}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createHelfer(@PathParam("eventID") int eventID, @PathParam("benutzerID") int benutzerID) {
         try {
             helferVerwalten.addHelfer(eventID, benutzerID);
@@ -56,11 +56,11 @@ public class Helfer
 
     @DELETE
     @Path("/{eventID}/{benutzerID}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response deleteHelfer(@PathParam("eventID") int eventID, @PathParam("benutzerID") int benutzerID) {
         try {
             helferVerwalten.deleteHelfer(eventID, benutzerID);
-            return Response.noContent().build();
+            return Response.status(Response.Status.NO_CONTENT).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
