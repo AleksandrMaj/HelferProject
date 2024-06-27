@@ -1,50 +1,31 @@
 package core.usecases;
 
-import core.entities.Benutzer;
+import core.entities.Event;
 import dataaccess.EventDAO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
+import java.util.List;
+
 @Stateless
-public class EventManager
-{
-    //TODO: Add eventDAO
+public class EventManager {
+
     @EJB
     private EventDAO eventDAO;
 
-    public void addHelfer(int eventID, int benutzerID) {
-        /*entityManager.getTransaction().begin();
-        Benutzer benutzer = entityManager.find(Benutzer.class, benutzerID);
-        if (benutzer != null) {
-            Helfer helfer = new Helfer();
-            helfer.setEventId(eventID);
-            helfer.setMitglied(benutzer);
-            entityManager.persist(helfer);
-        } else {
-            System.out.println("Benutzer mit ID " + benutzerID + " nicht gefunden.");
-        }
-        entityManager.getTransaction().commit();*/
+    public Event addEvent(Event event) {
+        return eventDAO.addEvent(event);
     }
 
-    public void removeHelfer(int eventID, int benutzerID) {
-        /*entityManager.getTransaction().begin();
-        TypedQuery<Helfer> query = entityManager.createQuery(
-                "SELECT h FROM Helfer h WHERE h.eventId = :eventID AND h.mitglied.id = :benutzerID",
-                Helfer.class);
-        query.setParameter("eventID", eventID);
-        query.setParameter("benutzerID", benutzerID);
-
-        try {
-            Helfer helfer = query.getSingleResult();
-            entityManager.remove(helfer);
-        } catch (Exception e) {
-            System.out.println("Helfer nicht gefunden oder Fehler beim Löschen: " + e.getMessage());
-        }
-        entityManager.getTransaction().commit();*/
+    public List<Event> getAllEvents() {
+        return eventDAO.findAllEvents();
     }
 
-    //TODO: Implement
-    public Benutzer[] getHelferFromEvent(int eventID) {
-        return new Benutzer[1];
+    public Event modifyEvent(Event event) {
+        return eventDAO.modifyEvent(event);
+    }
+
+    public void deleteEvent(int id) {
+        eventDAO.deleteEvent(id);
     }
 }

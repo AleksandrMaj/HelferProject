@@ -15,27 +15,24 @@ public class EventDAO {
     @PersistenceContext
     private EntityManager em;
 
-    public Event createEvent(Event event) {
+    public Event addEvent(Event event) {
         em.persist(event);
         return event;
-    }
-
-    public Event findEventById(int id) {
-        return em.find(Event.class, id);
     }
 
     public List<Event> findAllEvents() {
         return em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
     }
 
-    public Event updateEvent(Event event) {
+    public Event modifyEvent(Event event) {
         return em.merge(event);
     }
 
     public void deleteEvent(int id) {
-        Event event = findEventById(id);
+        Event event = em.find(Event.class, id);
         if (event != null) {
             em.remove(event);
         }
     }
+
 }
