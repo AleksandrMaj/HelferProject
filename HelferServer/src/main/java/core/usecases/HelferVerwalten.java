@@ -1,17 +1,22 @@
 package core.usecases;
 
 import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
-public class HelferVerwalten
+@Stateless
+public class HelferVerwalten implements IHelferVerwalten
 {
-    @EJB
-    EventManager eventManager;
+    @EJB private EventManager eventManager;
 
-    public void addHelfer(int eventID, int benutzerID) {
-
+    @Override
+    public void addHelfer(int eventID, int benutzerID)
+    {
+        eventManager.addHelfer(eventID, benutzerID);
     }
 
-    public void removeHelfer(int eventID, int benutzerID) {
-
+    @Override
+    public void deleteHelfer(int eventID, int benutzerID)
+    {
+        eventManager.removeHelfer(eventID, benutzerID);
     }
 }

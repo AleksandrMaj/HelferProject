@@ -1,16 +1,23 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import core.entities.Event;
 import dataaccess.BenutzerDAO;
+import dataaccess.HelferDAO;
 import jakarta.ejb.Stateless;
 
 import jakarta.ejb.EJB;
+
+import java.util.List;
 
 @Stateless
 public class BenutzerManager
 {
     @EJB
     private BenutzerDAO benutzerDAO;
+
+    @EJB
+    private HelferDAO helferDAO;
 
     public Benutzer benutzerSuchen(String username, String password)
     {
@@ -21,7 +28,7 @@ public class BenutzerManager
         benutzerDAO.save(newBenutzer);
     }
 
-    //TODO: Implement
-    public void getHelferEventsFromBenutzer(int eventID) {
+    public List<Event> getEventsFromBenutzer(int eventID) {
+        return helferDAO.getAllEventsFromBenutzer(eventID);
     }
 }
