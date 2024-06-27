@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/auth")
-public class Authentifizierung
+public class ServicesBenutzer
 {
     @EJB private IAnmelden anmelden;
     @EJB private IRegistrieren registrieren;
