@@ -3,9 +3,11 @@ package core.usecases;
 import core.entities.Benutzer;
 import core.entities.Event;
 import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
 import java.util.List;
 
+@Stateless
 public class HelferAuflisten implements IHelferAuflisten
 {
     @EJB private EventManager eventManager;

@@ -1,7 +1,9 @@
 package core.usecases;
 
 import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
+@Stateless
 public class HelferVerwalten implements IHelferVerwalten
 {
     @EJB private EventManager eventManager;
