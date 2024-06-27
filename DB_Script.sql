@@ -18,20 +18,34 @@ CREATE TABLE Benutzer
 
 -- Insert example data
 INSERT INTO Benutzer (name, vorname, strasse, hausnummer, stadt, plz, benutzergruppe, email, passwort)
-VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMIN',
-        'max.mustermann@example.com', 'password123'),
-       ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'USER', 'john.doe@example.com',
-        'password456');
+VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMIN', 'max.mustermann@example.com',
+        'password123'),
+       ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'USER', 'john.doe@example.com', 'password456');
 
--- Drop table Helfer if exists (Apache Derby doesn't support IF EXISTS directly)
--- Make sure to drop the table manually or use your DB management tool to drop it before running this script
+-- Create Event table
+CREATE TABLE Event
+(
+    eventID       INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    name          VARCHAR(255) NOT NULL,
+    date          DATE         NOT NULL,
+    organisatorID INT,
+    CONSTRAINT FK_Organisator FOREIGN KEY (organisatorID) REFERENCES Benutzer (id)
+);
 
--- Create the table
+-- Create Helfer table for the Many-to-Many relationship
 CREATE TABLE Helfer
 (
     ID         INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    eventID    INT,
-    benutzerID INT,
-    FOREIGN KEY (eventID) REFERENCES Events (eventID),
-    FOREIGN KEY (benutzerID) REFERENCES Benutzer (benutzerID)
+    eventID    INT NOT NULL,
+    benutzerID INT NOT NULL,
+    FOREIGN KEY (benutzerID) REFERENCES Benutzer (id),
+    FOREIGN KEY (eventID) REFERENCES Event (eventID)
 );
+
+-- Optionally, you can add indexes for the foreign keys if necessary
+CREATE INDEX idx_benutzerID ON Helfer (benutzerID);
+CREATE INDEX idx_eventID ON Helfer (eventID);
+
+-- Insert a sample Event
+INSERT INTO Event (name, date, organisatorID)
+VALUES ('Sample Event', '2024-06-26', 3);

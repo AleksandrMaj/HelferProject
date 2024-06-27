@@ -1,27 +1,30 @@
 package core.usecases;
 
-import core.entities.Benutzer;
-import dataaccess.HelferDAO;
+import core.entities.Event;
+import dataaccess.EventDAO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-
 import java.util.List;
 
 @Stateless
-public class EventManager
-{
+public class EventManager {
+
     @EJB
-    HelferDAO helferDAO;
+    private EventDAO eventDAO;
 
-    public void addHelfer(int eventID, int benutzerID) {
-        helferDAO.createBenutzerForEvent(eventID, benutzerID);
+    public Event addEvent(Event event) {
+        return eventDAO.addEvent(event);
     }
 
-    public void removeHelfer(int eventID, int benutzerID) {
-        helferDAO.deleteBenutzerFromEvent(eventID, benutzerID);
+    public List<Event> getAllEvents() {
+        return eventDAO.findAllEvents();
     }
 
-    public List<Benutzer> getHelferFromEvent(int eventID) {
-        return helferDAO.getAllHelferFromEvent(eventID);
+    public Event modifyEvent(Event event) {
+        return eventDAO.modifyEvent(event);
+    }
+
+    public void deleteEvent(int id) {
+        eventDAO.deleteEvent(id);
     }
 }

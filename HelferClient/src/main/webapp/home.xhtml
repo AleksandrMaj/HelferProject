@@ -3,9 +3,190 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
     <title>Success</title>
+    <style>
+        body {
+            font-family: Courier New, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: Black;
+            padding: 10px;
+            border-bottom: 2px solid gray;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5em; /* Verkleinerte Schriftgröße für den Titel */
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: Black;
+            text-decoration: none;
+            padding: 5px 5px;
+            border-radius: 5px;
+            font-size: 10px; /* Verkleinerte Schriftgröße für Navigation */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .profile-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .dropdown-content {
+            display: none;
+            border-radius: 5px;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .profile-menu:hover .dropdown-content {
+            display: block;
+        }
+
+        main {
+            padding: 1rem;
+        }
+
+        #eventList {
+            margin-top: 2rem;
+        }
+
+        #eventList h2 {
+            font-size: 1.2em; /* Verkleinerte Schriftgröße für den Eventlistentitel */
+            margin: 0;
+            padding-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            font-size: 0.8em; /* Verkleinerte Schriftgröße für Tabellenzellen */
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        section{
+            border: 2px solid gray;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+
+    </style>
 </h:head>
 <h:body>
-    <h:outputText value="Welcome, #{userSession.loggedInUser.vorname}. (Hier kann der Home-Bildschirm angezeigt werden)" />
+    <header>
+        <h1>EventMaster</h1>
+        <nav>
+            <div class="profile-menu">
+                <div class="profile">
+                    <!-- Todo: Add Profile picture -->
+                    <span>Wlad</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="#" id="profileButton">Mein Profil</a>
+                    <a href="#" id="logoutButton">Abmelden</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section id="eventList">
+            <h2>Eventliste</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Nr</th>
+                    <th>Eventname</th>
+                    <th>Termin</th>
+                    <th>Organisator</th>
+                    <th>Helfer</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Event 1</td>
+                    <td>01.07.2024</td>
+                    <td>Max Mustermann</td>
+                    <td>Anna, Tom, Lisa</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Event 2</td>
+                    <td>15.07.2024</td>
+                    <td>Erika Musterfrau</td>
+                    <td>John, Sara, Tim</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Event 3</td>
+                    <td>20.07.2024</td>
+                    <td>Hans Müller</td>
+                    <td>Mark, Paula, Leo</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
 </h:body>
 </html>
 <!-- TODO: Implement manager so we can access the current user across the application -->
