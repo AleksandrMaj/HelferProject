@@ -35,22 +35,17 @@ CREATE TABLE Event
 -- Create Helfer table for the Many-to-Many relationship
 CREATE TABLE Helfer
 (
-    id         INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    benutzerID INT NOT NULL,
+    ID         INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     eventID    INT NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_benutzer FOREIGN KEY (benutzerID) REFERENCES Benutzer (id),
-    CONSTRAINT FK_Event FOREIGN KEY (eventID) REFERENCES Event (eventID)
+    benutzerID INT NOT NULL,
+    FOREIGN KEY (benutzerID) REFERENCES Benutzer (id),
+    FOREIGN KEY (eventID) REFERENCES Event (eventID)
 );
 
 -- Optionally, you can add indexes for the foreign keys if necessary
 CREATE INDEX idx_benutzerID ON Helfer (benutzerID);
-CREATE INDEX idx_eventID ON Helfer (eventId);
+CREATE INDEX idx_eventID ON Helfer (eventID);
 
 -- Insert a sample Event
 INSERT INTO Event (name, date, organisatorID)
 VALUES ('Sample Event', '2024-06-26', 3);
-
-
-
-

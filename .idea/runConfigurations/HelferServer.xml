@@ -61,7 +61,7 @@
         <option name="USE_DEFAULT" value="false" />
         <option name="SCRIPT" value="$PROJECT_DIR$/../glassfish7/glassfish/bin/asadmin.bat" />
         <option name="VM_PARAMETERS" value="" />
-        <option name="PROGRAM_PARAMETERS" value="start-domain domain1" />
+        <option name="PROGRAM_PARAMETERS" value="stop-domain domain1" />
       </SHUTDOWN>
     </ConfigurationWrapper>
     <method v="2">

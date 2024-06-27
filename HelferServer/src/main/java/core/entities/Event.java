@@ -60,7 +60,4 @@ public class Event implements Serializable {
     public List<Benutzer> getHelfer() { return helferListe; }
 
     public void setHelfer(List<Benutzer> helferListe) { this.helferListe = helferListe;}
-
-
-
 }

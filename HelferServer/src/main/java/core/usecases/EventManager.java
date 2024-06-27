@@ -4,7 +4,6 @@ import core.entities.Event;
 import dataaccess.EventDAO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-
 import java.util.List;
 
 @Stateless

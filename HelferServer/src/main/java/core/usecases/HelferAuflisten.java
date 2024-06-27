@@ -1,14 +1,29 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import core.entities.Event;
 import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
-public class HelferAuflisten
+import java.util.List;
+
+
+//TODO: When get is possible from orm, than there all can be removed
+@Stateless
+public class HelferAuflisten implements IHelferAuflisten
 {
-    @EJB
-    EventManager eventManager;
+    @EJB private EventManager eventManager;
+    @EJB private BenutzerManager benutzerManager;
 
-    public Benutzer[] getHelfer(int eventID) {
-        return new Benutzer[1];
+    @Override
+    public List<Event> getAllEventsFromBenutzer(int benutzerID)
+    {
+        return benutzerManager.getEventsFromBenutzer(benutzerID);
+    }
+
+    @Override
+    public List<Benutzer> getAllBenutzerFromEvent(int eventID)
+    {
+        return eventManager.getHelferFromEvent(eventID);
     }
 }
