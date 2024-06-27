@@ -1,8 +1,9 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import facade.BenutzerTO;
 
 public interface IAnmelden
 {
-    Benutzer einloggen(Benutzer user);
+    Benutzer einloggen(BenutzerTO user);
 }

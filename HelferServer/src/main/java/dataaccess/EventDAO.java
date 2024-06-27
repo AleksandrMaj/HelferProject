@@ -10,29 +10,39 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 @Singleton
-public class EventDAO {
+public class EventDAO
+{
 
     @PersistenceContext
     private EntityManager em;
 
-    public Event addEvent(Event event) {
-        em.persist(event);
+    public Event addEvent(Event event)
+    {
+        EventEntity eventEntity = new EventEntity(event);
+        em.persist(eventEntity);
         return event;
     }
 
-    public List<Event> findAllEvents() {
-        return em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
+    public List<Event> findAllEvents()
+    {
+        return em.createQuery("SELECT e FROM Event e", EventEntity.class).getResultList().stream().map(EventEntity::toEvent).toList();
     }
 
-    public Event modifyEvent(Event event) {
-        return em.merge(event);
+    public Event modifyEvent(Event event)
+    {
+        EventEntity eventEntity = new EventEntity(event);
+        em.merge(eventEntity);
+        return event;
     }
 
-    public void deleteEvent(int id) {
-        Event event = em.find(Event.class, id);
-        if (event != null) {
-            em.remove(event);
+    public void deleteEvent(int id)
+    {
+        EventEntity eventEntity = em.find(EventEntity.class, id);
+        if (eventEntity != null)
+        {
+            em.remove(eventEntity);
         }
     }
-
 }
+
+//TODO: Correct return statements, because sometimes we need booleon or the object

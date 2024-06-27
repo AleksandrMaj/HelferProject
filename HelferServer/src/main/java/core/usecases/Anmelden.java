@@ -1,6 +1,7 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import facade.BenutzerTO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
@@ -11,8 +12,8 @@ public class Anmelden implements IAnmelden
     private BenutzerManager benutzerManager;
 
     @Override
-    public Benutzer einloggen(Benutzer user)
+    public Benutzer einloggen(BenutzerTO user)
     {
-        return benutzerManager.benutzerSuchen(user.getEmail(), user.getPasswort());
+        return benutzerManager.benutzerSuchen(user.email(), user.passwort());
     }
 }

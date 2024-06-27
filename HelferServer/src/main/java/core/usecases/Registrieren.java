@@ -2,6 +2,7 @@ package core.usecases;
 
 import core.entities.Benutzer;
 import core.enums.Benutzergruppe;
+import facade.BenutzerTO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
@@ -11,13 +12,14 @@ public class Registrieren implements IRegistrieren {
     private BenutzerManager benutzerManager;
 
     @Override
-    public Benutzer neuenBenutzerRegistrieren(Benutzer benutzer)
+    public Benutzer neuenBenutzerRegistrieren(BenutzerTO benutzer)
     {
-        benutzer.setBenutzergruppe(Benutzergruppe.MITGLIED); // Set default user group if needed
+        Benutzer newUser = benutzer.toBenutzer();
+        newUser.setBenutzergruppe(Benutzergruppe.MITGLIED);
 
         //TODO: Check so that no E-Mail is getting used twice
 
-        benutzerManager.addBenutzer(benutzer);
-        return benutzer;
+        benutzerManager.addBenutzer(newUser);
+        return newUser;
     }
 }

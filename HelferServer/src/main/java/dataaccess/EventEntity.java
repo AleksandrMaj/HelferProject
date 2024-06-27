@@ -37,6 +37,14 @@ public class EventEntity
         this.organisator = organisator;
     }
 
+    public EventEntity(Event event) {
+        this.id = event.getId();
+        this.name = event.getName();
+        this.date = event.getDate();
+        this.helferListe = event.getHelferListe();
+        this.organisator = event.getOrganisator();
+    }
+
     // Getter und Setter
     public int getId() { return id; }
 

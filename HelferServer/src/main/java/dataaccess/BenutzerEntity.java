@@ -42,6 +42,16 @@ public class BenutzerEntity implements Serializable
         this.passwort = passwort;
     }
 
+    public BenutzerEntity(Benutzer benutzer) {
+        this.id = benutzer.getId();
+        this.name = benutzer.getName();
+        this.vorname = benutzer.getVorname();
+        this.adresse = benutzer.getAdresse();
+        this.benutzergruppe = benutzer.getBenutzergruppe();
+        this.email = benutzer.getEmail();
+        this.passwort = benutzer.getPasswort();
+    }
+
     public int getId()
     {
         return id;

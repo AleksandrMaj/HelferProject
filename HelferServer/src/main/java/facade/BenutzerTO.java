@@ -10,7 +10,8 @@ public record BenutzerTO(
         String vorname,
         Adresse adresse,
         Benutzergruppe benutzergruppe,
-        String email
+        String email,
+        String passwort
 )
 {
     public Benutzer toBenutzer()
@@ -22,6 +23,7 @@ public record BenutzerTO(
         benutzer.setAdresse(this.adresse);
         benutzer.setBenutzergruppe(this.benutzergruppe);
         benutzer.setEmail(this.email);
+        benutzer.setPasswort(this.passwort);
         return benutzer;
     }
 }
