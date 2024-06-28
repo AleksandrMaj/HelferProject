@@ -28,8 +28,7 @@ public class EventEntity
     private List<BenutzerEntity> helferListe;
 
     @ManyToOne
-    @JoinColumn(name = "benutzerID")
-
+    @JoinColumn(name = "organisatorID")
     private BenutzerEntity organisator;
 
     public EventEntity() {}

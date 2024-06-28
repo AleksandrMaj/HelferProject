@@ -50,7 +50,7 @@
       </SHUTDOWN>
     </ConfigurationWrapper>
     <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
-      <option name="USE_ENV_VARIABLES" value="true" />
+      <option name="USE_ENV_VARIABLES" value="false" />
       <STARTUP>
         <option name="USE_DEFAULT" value="false" />
         <option name="SCRIPT" value="$PROJECT_DIR$/../glassfish7/glassfish/bin/asadmin.bat" />
