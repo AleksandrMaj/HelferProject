@@ -20,7 +20,7 @@ public class EventEntity
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Helfer",
             joinColumns = @JoinColumn(name = "eventID"),
