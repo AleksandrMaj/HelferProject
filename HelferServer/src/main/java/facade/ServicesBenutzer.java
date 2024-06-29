@@ -1,8 +1,6 @@
 package facade;
 
 import core.entities.Benutzer;
-import core.enums.Benutzergruppe;
-import core.usecases.BenutzerManager;
 import core.usecases.IAnmelden;
 import core.usecases.IRegistrieren;
 import jakarta.ejb.EJB;
@@ -14,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/auth")
-public class Authentifizierung
+public class ServicesBenutzer
 {
     @EJB private IAnmelden anmelden;
     @EJB private IRegistrieren registrieren;
@@ -23,7 +21,7 @@ public class Authentifizierung
     @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(Benutzer user) {
+    public Response login(BenutzerTO user) {
         Benutzer benutzer = anmelden.einloggen(user);
 
         if (benutzer != null) {
@@ -37,7 +35,7 @@ public class Authentifizierung
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(Benutzer newBenutzer) {
+    public Response register(BenutzerTO newBenutzer) {
         try {
             Benutzer benutzer = registrieren.neuenBenutzerRegistrieren(newBenutzer);
 

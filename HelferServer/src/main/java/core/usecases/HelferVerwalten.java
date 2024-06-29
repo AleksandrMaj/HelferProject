@@ -11,12 +11,12 @@ public class HelferVerwalten implements IHelferVerwalten
     @Override
     public void addHelfer(int eventID, int benutzerID)
     {
-        eventManager.addHelfer(eventID, benutzerID);
+        //eventManager.addHelfer(eventID, benutzerID);
     }
 
     @Override
     public void deleteHelfer(int eventID, int benutzerID)
     {
-        eventManager.removeHelfer(eventID, benutzerID);
+        //eventManager.removeHelfer(eventID, benutzerID); //TODO:
     }
 }

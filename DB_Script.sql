@@ -16,20 +16,14 @@ CREATE TABLE Benutzer
     passwort       VARCHAR(255)
 );
 
--- Insert example data
-INSERT INTO Benutzer (name, vorname, strasse, hausnummer, stadt, plz, benutzergruppe, email, passwort)
-VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMIN', 'max.mustermann@example.com',
-        'password123'),
-       ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'USER', 'john.doe@example.com', 'password456');
-
 -- Create Event table
 CREATE TABLE Event
 (
-    eventID       INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID       INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     name          VARCHAR(255) NOT NULL,
     date          DATE         NOT NULL,
     organisatorID INT,
-    CONSTRAINT FK_Organisator FOREIGN KEY (organisatorID) REFERENCES Benutzer (id)
+    FOREIGN KEY (organisatorID) REFERENCES Benutzer (id)
 );
 
 -- Create Helfer table for the Many-to-Many relationship
@@ -39,13 +33,31 @@ CREATE TABLE Helfer
     eventID    INT NOT NULL,
     benutzerID INT NOT NULL,
     FOREIGN KEY (benutzerID) REFERENCES Benutzer (id),
-    FOREIGN KEY (eventID) REFERENCES Event (eventID)
+    FOREIGN KEY (eventID) REFERENCES Event (id)
 );
 
 -- Optionally, you can add indexes for the foreign keys if necessary
 CREATE INDEX idx_benutzerID ON Helfer (benutzerID);
 CREATE INDEX idx_eventID ON Helfer (eventID);
 
+-- Insert example data
+INSERT INTO Benutzer (name, vorname, strasse, hausnummer, stadt, plz, benutzergruppe, email, passwort)
+VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMIN', 'max.mustermann@example.com', 'password123'),
+       ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'MITGLIED', 'john.doe@example.com', 'password456'),
+       ('Smith', 'Jane', 'Second St', '456', 'Example Town', '10101', 'MITGLIED', 'jane.smith@example.com', 'password789'),
+       ('Brown', 'Charlie', 'Third Ave', '789', 'Testville', '20202', 'ADMIN', 'charlie.brown@example.com', 'password321');
+
 -- Insert a sample Event
 INSERT INTO Event (name, date, organisatorID)
-VALUES ('Sample Event', '2024-06-26', 3);
+VALUES ('Sample Event 1', '2024-06-26', 1),
+       ('Sample Event 2', '2024-07-15', 2),
+       ('Sample Event 3', '2024-08-05', 4);
+
+-- Insert a sample Event
+INSERT INTO Helfer (eventID, benutzerID)
+VALUES (1, 2),
+       (1, 3),
+       (2, 1),
+       (2, 4),
+       (3, 2),
+       (3, 3);

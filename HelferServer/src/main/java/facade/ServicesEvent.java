@@ -2,6 +2,7 @@ package facade;
 
 import core.entities.Event;
 import core.usecases.IEventsVerwalten;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -9,8 +10,6 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/events")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class ServicesEvent{
 
     @EJB
@@ -23,6 +22,15 @@ public class ServicesEvent{
     }
 
     @GET
+    @Path("/test")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response testService() {
+        return Response.ok("Service is up and running").build();
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllEvents() {
         List<Event> events = eventsVerwalten.getAllEvents();
         return Response.ok(events).build();

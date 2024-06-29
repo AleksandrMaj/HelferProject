@@ -13,19 +13,20 @@ public class BenutzerDAO
     private EntityManager em;
 
     public Benutzer suchen(String username, String password) {
-        TypedQuery<Benutzer> query = em.createQuery(
-                "SELECT b FROM Benutzer b WHERE b.email = :email AND b.passwort = :password", Benutzer.class);
+        TypedQuery<BenutzerEntity> query = em.createQuery(
+                "SELECT b FROM Benutzer b WHERE b.email = :email AND b.passwort = :password", BenutzerEntity.class);
         query.setParameter("email", username);
         query.setParameter("password", password);
 
         try {
-            return query.getSingleResult();
+            return query.getSingleResult().toBenutzer();
         } catch (Exception e) {
             return null;
         }
     }
 
     public void save(Benutzer benutzer) {
-        em.persist(benutzer);
+        BenutzerEntity benutzerEntity = new BenutzerEntity(benutzer);
+        em.persist(benutzerEntity);
     }
 }
