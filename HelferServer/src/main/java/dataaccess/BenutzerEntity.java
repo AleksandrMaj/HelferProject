@@ -7,6 +7,7 @@ import core.enums.Benutzergruppe;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -50,7 +51,8 @@ public class BenutzerEntity implements Serializable
         this.events = events;
     }
 
-    public BenutzerEntity(Benutzer benutzer) {
+    public BenutzerEntity(Benutzer benutzer)
+    {
         this.id = benutzer.getId();
         this.name = benutzer.getName();
         this.vorname = benutzer.getVorname();
@@ -143,7 +145,8 @@ public class BenutzerEntity implements Serializable
         this.events = events;
     }
 
-    public Benutzer toBenutzer() {
+    public Benutzer toBenutzer()
+    {
         Benutzer benutzer = new Benutzer();
         benutzer.setId(this.id);
         benutzer.setName(this.name);
@@ -154,13 +157,14 @@ public class BenutzerEntity implements Serializable
         benutzer.setPasswort(this.passwort);
 
         benutzer.setEvents(this.events != null ?
-                this.events.stream().map(eventEntity -> {
+                this.events.stream().map(eventEntity ->
+                {
                     Event event = new Event();
                     event.setId(eventEntity.getId());
                     event.setName(eventEntity.getName());
                     event.setDate(eventEntity.getDate());
                     return event;
-                }).toList() : null);
+                }).toList() : new LinkedList<>());
 
         return benutzer;
     }

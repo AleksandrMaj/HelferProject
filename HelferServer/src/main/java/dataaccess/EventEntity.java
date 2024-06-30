@@ -31,14 +31,19 @@ public class EventEntity
     @JoinColumn(name = "organisatorID")
     private BenutzerEntity organisator;
 
-    public EventEntity() {}
-    public EventEntity(String name, Date date, BenutzerEntity organisator) {
+    public EventEntity()
+    {
+    }
+
+    public EventEntity(String name, Date date, BenutzerEntity organisator)
+    {
         this.name = name;
         this.date = date;
         this.organisator = organisator;
     }
 
-    public EventEntity(Event event) {
+    public EventEntity(Event event)
+    {
         this.id = event.getId();
         this.name = event.getName();
         this.date = event.getDate();
@@ -100,7 +105,8 @@ public class EventEntity
         this.organisator = organisator;
     }
 
-    public Event toEvent() {
+    public Event toEvent()
+    {
         Event event = new Event();
         event.setId(this.id);
         event.setName(this.name);
@@ -108,7 +114,13 @@ public class EventEntity
         event.setOrganisator(this.organisator.toBenutzer());
 
         List<Benutzer> userList = this.helferListe.stream()
-                .map(BenutzerEntity::toBenutzer)
+                .map(benutzerEntity ->
+                {
+                    Benutzer user = new Benutzer();
+                    user.setVorname(benutzerEntity.getVorname());
+                    user.setName(benutzerEntity.getName());
+                    return user;
+                })
                 .toList();
 
         event.setHelferListe(userList);
