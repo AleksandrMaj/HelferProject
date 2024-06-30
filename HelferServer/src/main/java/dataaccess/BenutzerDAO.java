@@ -14,7 +14,7 @@ public class BenutzerDAO
 
     public Benutzer suchen(String username, String password) {
         TypedQuery<BenutzerEntity> query = em.createQuery(
-                "SELECT b FROM Benutzer b WHERE b.email = :email AND b.passwort = :password", BenutzerEntity.class);
+                "SELECT b FROM BenutzerEntity b WHERE b.email = :email AND b.passwort = :password", BenutzerEntity.class);
         query.setParameter("email", username);
         query.setParameter("password", password);
 
