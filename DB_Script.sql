@@ -1,6 +1,10 @@
 -- Drop table Benutzer if exists (Apache Derby doesn't support IF EXISTS directly)
 -- Make sure to drop the table manually or use your DB management tool to drop it before running this script
 
+DROP TABLE Helfer;
+DROP TABLE Event;
+DROP TABLE Benutzer;
+
 -- Create Benutzer table
 CREATE TABLE Benutzer
 (

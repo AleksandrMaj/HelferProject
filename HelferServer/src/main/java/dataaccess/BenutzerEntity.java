@@ -2,10 +2,12 @@ package dataaccess;
 
 import core.entities.Adresse;
 import core.entities.Benutzer;
+import core.entities.Event;
 import core.enums.Benutzergruppe;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Benutzer")
@@ -29,18 +31,23 @@ public class BenutzerEntity implements Serializable
 
     private String passwort;
 
+    @ManyToMany(mappedBy = "helferListe", fetch = FetchType.EAGER)
+    private List<EventEntity> events;
+
     public BenutzerEntity()
     {
     }
 
-    public BenutzerEntity(String name, String vorname, Adresse adresse, Benutzergruppe benutzergruppe, String email, String passwort)
+    public BenutzerEntity(int id, String name, String vorname, Adresse adresse, Benutzergruppe benutzergruppe, String email, String passwort, List<EventEntity> events)
     {
+        this.id = id;
         this.name = name;
         this.vorname = vorname;
         this.adresse = adresse;
         this.benutzergruppe = benutzergruppe;
         this.email = email;
         this.passwort = passwort;
+        this.events = events;
     }
 
     public BenutzerEntity(Benutzer benutzer) {
@@ -51,6 +58,9 @@ public class BenutzerEntity implements Serializable
         this.benutzergruppe = benutzer.getBenutzergruppe();
         this.email = benutzer.getEmail();
         this.passwort = benutzer.getPasswort();
+        this.events = benutzer.getEvents().stream()
+                .map(EventEntity::new)
+                .toList();
     }
 
     public int getId()
@@ -123,6 +133,16 @@ public class BenutzerEntity implements Serializable
         this.passwort = passwort;
     }
 
+    public List<EventEntity> getEvents()
+    {
+        return events;
+    }
+
+    public void setEvents(List<EventEntity> events)
+    {
+        this.events = events;
+    }
+
     public Benutzer toBenutzer() {
         Benutzer benutzer = new Benutzer();
         benutzer.setId(this.id);
@@ -132,6 +152,16 @@ public class BenutzerEntity implements Serializable
         benutzer.setBenutzergruppe(this.benutzergruppe);
         benutzer.setEmail(this.email);
         benutzer.setPasswort(this.passwort);
+
+        benutzer.setEvents(this.events != null ?
+                this.events.stream().map(eventEntity -> {
+                    Event event = new Event();
+                    event.setId(eventEntity.getId());
+                    event.setName(eventEntity.getName());
+                    event.setDate(eventEntity.getDate());
+                    return event;
+                }).toList() : null);
+
         return benutzer;
     }
 }

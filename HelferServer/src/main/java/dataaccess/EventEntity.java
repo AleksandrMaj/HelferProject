@@ -101,7 +101,7 @@ public class EventEntity
     }
 
     public Event toEvent() {
-        Event event = new core.entities.Event();
+        Event event = new Event();
         event.setId(this.id);
         event.setName(this.name);
         event.setDate(this.date);
