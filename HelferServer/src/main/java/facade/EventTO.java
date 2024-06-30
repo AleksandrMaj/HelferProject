@@ -3,7 +3,9 @@ package facade;
 import core.entities.Benutzer;
 import core.entities.Event;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public record EventTO(
@@ -21,7 +23,7 @@ public record EventTO(
         event.setName(this.name);
         event.setDate(this.date);
         event.setOrganisator(this.organisator);
-        event.setHelferListe(this.helferListe);
+        event.setHelferListe(this.helferListe != null ? this.helferListe : new ArrayList<>());
         return event;
     }
 }

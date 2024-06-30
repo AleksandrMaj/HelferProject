@@ -9,27 +9,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/events")
+@Path("/event")
 public class ServicesEvent{
 
     @EJB
     private IEventsVerwalten eventsVerwalten;
 
     @POST
-    public Response createEvent(Event event) {
-        Event createdEvent = eventsVerwalten.eventsAnlegen(event);
+    public Response createEvent(EventTO event) {
+        Event createdEvent = eventsVerwalten.eventsAnlegen(event.toEvent());
         return Response.ok(createdEvent).build();
     }
 
     @GET
-    @Path("/test")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response testService() {
-        return Response.ok("Service is up and running").build();
-    }
-
-    @GET
-    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllEvents() {
         List<Event> events = eventsVerwalten.getAllEvents();
