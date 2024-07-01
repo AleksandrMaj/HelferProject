@@ -40,4 +40,5 @@ public class ServicesEvent{
         eventsVerwalten.eventLoeschen(id);
         return Response.noContent().build();
     }
+
 }

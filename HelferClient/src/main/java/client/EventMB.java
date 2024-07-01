@@ -26,9 +26,13 @@ public class EventMB {
     private Event event;
     private List<Event> events;
 
+
+    @Inject
+    UserSession userSession;
+
     public EventMB() {
         client = ClientBuilder.newClient();
-        target = client.target("http://localhost:8080/HelferServer/webapi/event");
+        target = client.target(Environment.BASE + "/event");
         event = new Event();
         loadEvents();
     }
@@ -36,10 +40,17 @@ public class EventMB {
     public void loadEvents() {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
+
                 .get();
 
         if (response.getStatus() == 200) {
             events = response.readEntity(new GenericType<List<Event>>() {});
+
+            //if MITGLIED then userSession.meineEvents;
+
+            //if Organisator then events.filter(userSession.id == event.organistor.id);
+
+            //TODO: HIER --> FILTERN
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Laden der Events", null));
         }
@@ -48,6 +59,7 @@ public class EventMB {
     public String createEvent() {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
+                .header("Authentification",userSession.getToken())
                 .post(Entity.json(event));
 
         if (response.getStatus() == 200) {
@@ -64,6 +76,7 @@ public class EventMB {
     public String updateEvent() {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
+                .header("Authentification",userSession.getToken())
                 .put(Entity.json(event));
 
         if (response.getStatus() == 200) {
@@ -79,7 +92,9 @@ public class EventMB {
     public String deleteEvent(int id) {
         Response response = target
                 .path(String.valueOf(id))
-                .request(MediaType.APPLICATION_JSON).delete();
+                .request(MediaType.APPLICATION_JSON)
+                .header("Authentification",userSession.getToken())
+                .delete();
         if (response.getStatus() == 204) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
             loadEvents(); // Liste aktualisieren
@@ -106,5 +121,6 @@ public class EventMB {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
 
 }
