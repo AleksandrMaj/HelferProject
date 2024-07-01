@@ -1,5 +1,8 @@
 package core.services;
 
+import core.entities.Benutzer;
+import core.usecases.BenutzerManager;
+import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import java.util.Base64;
 import java.util.HashMap;
@@ -10,13 +13,15 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class Authentification
 {
-    private static final String SECRET_KEY = "VERTEILTE_ANWENDUNGEN"; // Use a more secure secret in production
-    private static final long EXPIRATION_TIME = TimeUnit.HOURS.toMillis(10); // Token validity of 10 hours
-    private static final Map<String, Integer> tokenStore = new HashMap<>(); // Store tokens in-memory
+    private static final String SECRET_KEY = "EventMaster";
+    private static final Map<String, Integer> tokenStore = new HashMap<>();
+
+    @EJB
+    private static BenutzerManager benutzerManager;
 
     public static String generateToken(int userID) {
         String token = Base64.getEncoder().encodeToString((userID + ":" + UUID.randomUUID().toString() + ":" + SECRET_KEY).getBytes());
-        tokenStore.put(token, userID); // Store token with associated username
+        tokenStore.put(token, userID);
         return token;
     }
 
@@ -24,8 +29,9 @@ public class Authentification
         return tokenStore.containsKey(token);
     }
 
-    public static int getUserIdFromToken(String token) {
-        return tokenStore.get(token);
+    public static Benutzer getUserFromToken(String token) {
+        int userID = tokenStore.get(token);
+        return benutzerManager.findById(userID);
     }
 
     public static void invalidateToken(String token) {
