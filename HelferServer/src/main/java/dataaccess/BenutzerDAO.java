@@ -12,7 +12,7 @@ public class BenutzerDAO
     @PersistenceContext
     private EntityManager em;
 
-    public Benutzer suchen(String username, String password) {
+    public Benutzer findByCredentials(String username, String password) {
         TypedQuery<BenutzerEntity> query = em.createQuery(
                 "SELECT b FROM BenutzerEntity b WHERE b.email = :email AND b.passwort = :password", BenutzerEntity.class);
         query.setParameter("email", username);
@@ -25,8 +25,30 @@ public class BenutzerDAO
         }
     }
 
-    public void save(Benutzer benutzer) {
+    public Benutzer findById(int id) {
+        BenutzerEntity entity = em.find(BenutzerEntity.class, id);
+        if (entity != null) {
+            return entity.toBenutzer();
+        }
+        return null;
+    }
+
+    public Benutzer findByEmail(String email) {
+        TypedQuery<BenutzerEntity> query = em.createQuery(
+                "SELECT b FROM BenutzerEntity b WHERE b.email = :email", BenutzerEntity.class);
+        query.setParameter("email", email);
+
+        try {
+            BenutzerEntity entity = query.getSingleResult();
+            return entity.toBenutzer();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Benutzer save(Benutzer benutzer) {
         BenutzerEntity benutzerEntity = new BenutzerEntity(benutzer);
         em.persist(benutzerEntity);
+        return benutzer;
     }
 }

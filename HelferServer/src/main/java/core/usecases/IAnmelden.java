@@ -5,5 +5,5 @@ import facade.BenutzerTO;
 
 public interface IAnmelden
 {
-    Benutzer einloggen(BenutzerTO user);
+    Benutzer einloggen(Benutzer user);
 }

@@ -1,6 +1,7 @@
 package core.entities;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Event
@@ -8,7 +9,7 @@ public class Event
     private int id;
     private String name;
     private Date date;
-    private List<Benutzer> helferListe;
+    private List<Benutzer> helferListe = new LinkedList<>();
     private Benutzer organisator;
 
     public Event() {
