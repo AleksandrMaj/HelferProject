@@ -2,8 +2,8 @@ package facade;
 
 import core.entities.Benutzer;
 import core.entities.Event;
+import jakarta.json.bind.annotation.JsonbDateFormat;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +11,8 @@ import java.util.List;
 public record EventTO(
         int id,
         String name,
+
+        @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         Date date,
         List<Benutzer> helferListe,
         Benutzer organisator
@@ -23,7 +25,7 @@ public record EventTO(
         event.setName(this.name);
         event.setDate(this.date);
         event.setOrganisator(this.organisator);
-        event.setHelferListe(this.helferListe != null ? this.helferListe : new ArrayList<>());
+        event.setHelferListe(this.helferListe != null ? this.helferListe : new LinkedList<>());
         return event;
     }
 }

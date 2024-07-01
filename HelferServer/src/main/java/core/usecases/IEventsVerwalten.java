@@ -10,7 +10,7 @@ public interface IEventsVerwalten {
 
     Event eventBearbeiten(Event event);
 
-    void eventLoeschen(int id);
+    boolean eventLoeschen(int id);
 
     List<Event> getAllEvents();
 }
