@@ -20,14 +20,14 @@ public class EventEntity
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "Helfer",
             joinColumns = @JoinColumn(name = "eventID"),
             inverseJoinColumns = @JoinColumn(name = "benutzerID"))
     private List<BenutzerEntity> helferListe;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organisatorID")
     private BenutzerEntity organisator;
 
@@ -124,6 +124,7 @@ public class EventEntity
                 .toList();
 
         event.setHelferListe(userList);
+
         return event;
     }
 }

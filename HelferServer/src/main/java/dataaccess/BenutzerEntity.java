@@ -7,6 +7,7 @@ import core.enums.Benutzergruppe;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class BenutzerEntity implements Serializable
 
     private String passwort;
 
-    @ManyToMany(mappedBy = "helferListe", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "helferListe", fetch = FetchType.LAZY)
     private List<EventEntity> events;
 
     public BenutzerEntity()
@@ -156,15 +157,21 @@ public class BenutzerEntity implements Serializable
         benutzer.setEmail(this.email);
         benutzer.setPasswort(this.passwort);
 
-        benutzer.setEvents(this.events != null ?
-                this.events.stream().map(eventEntity ->
+        benutzer.setEvents(this.events.stream()
+                .map(eventEntity ->
                 {
                     Event event = new Event();
                     event.setId(eventEntity.getId());
                     event.setName(eventEntity.getName());
                     event.setDate(eventEntity.getDate());
+
+                    Benutzer organisator = new Benutzer();
+                    organisator.setVorname(eventEntity.getOrganisator().getVorname());
+                    organisator.setName(eventEntity.getOrganisator().getName());
+                    event.setOrganisator(organisator);
+
                     return event;
-                }).toList() : new LinkedList<>());
+                }).toList());
 
         return benutzer;
     }
