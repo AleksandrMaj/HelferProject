@@ -31,17 +31,19 @@ public class UserSession implements Serializable {
     public boolean isAdmin() {
         return loggedInUser != null && loggedInUser.getBenutzergruppe() == Benutzergruppe.ADMIN;
     }
+
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "login?faces-redirect=true";
-
-    public String getToken()
-    {
-        return token;
     }
 
-    public void setToken(String token)
+        public String getToken()
     {
-        this.token = token;
-    }
+            return token;
+        }
+
+        public void setToken(String token)
+        {
+            this.token = token;
+        }
 }
