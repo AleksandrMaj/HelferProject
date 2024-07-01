@@ -1,6 +1,7 @@
 package facade;
 
 import core.entities.Benutzer;
+import core.services.Authentification;
 import core.usecases.IAnmelden;
 import core.usecases.IRegistrieren;
 import jakarta.ejb.EJB;
@@ -14,25 +15,34 @@ import jakarta.ws.rs.core.Response;
 @Path("/auth")
 public class ServicesBenutzer
 {
-    @EJB private IAnmelden anmelden;
-    @EJB private IRegistrieren registrieren;
+    @EJB
+    private IAnmelden anmelden;
+    @EJB
+    private IRegistrieren registrieren;
 
     @POST
     @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(BenutzerTO user) {
-        try {
+    public Response login(BenutzerTO user)
+    {
+        try
+        {
             Benutzer benutzer = anmelden.einloggen(user.toBenutzer());
 
-            if (benutzer != null) {
-                return Response.ok(benutzer).build();
+            if (benutzer != null)
+            {
+                return Response
+                        .ok(benutzer)
+                        .header("Authentification", "Bearer " + Authentification.generateToken(benutzer.getId()))
+                        .build();
             }
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("E-Mail oder Passwort falsch")
                     .type(MediaType.TEXT_PLAIN)
                     .build();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Anmeldung aufgrund eines Serverfehlers fehlgeschlagen")
                     .type(MediaType.TEXT_PLAIN)
@@ -44,20 +54,24 @@ public class ServicesBenutzer
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(BenutzerTO newUser) {
-        try {
+    public Response register(BenutzerTO newUser)
+    {
+        try
+        {
             Benutzer user = registrieren.neuenBenutzerRegistrieren(newUser.toBenutzer());
 
             return Response.status(Response.Status.CREATED)
                     .entity(user)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e)
+        {
             return Response.status(Response.Status.CONFLICT)
                     .entity(e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
                     .build();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Registrierung aufgrund eines Server-Fehlers fehlgeschlagen")
                     .type(MediaType.TEXT_PLAIN)

@@ -25,6 +25,14 @@ public class BenutzerDAO
         }
     }
 
+    public Benutzer findById(int id) {
+        BenutzerEntity entity = em.find(BenutzerEntity.class, id);
+        if (entity != null) {
+            return entity.toBenutzer();
+        }
+        return null;
+    }
+
     public Benutzer findByEmail(String email) {
         TypedQuery<BenutzerEntity> query = em.createQuery(
                 "SELECT b FROM BenutzerEntity b WHERE b.email = :email", BenutzerEntity.class);

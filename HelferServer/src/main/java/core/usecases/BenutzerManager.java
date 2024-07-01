@@ -24,4 +24,8 @@ public class BenutzerManager
     public boolean emailExists(String email) {
         return benutzerDAO.findByEmail(email) != null;
     }
+
+    public Benutzer findById(int id) {
+        return benutzerDAO.findById(id);
+    }
 }

@@ -2,6 +2,7 @@ package client;
 
 import entities.Benutzer;
 import enums.Benutzergruppe;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @SessionScoped
 public class UserSession implements Serializable {
     private Benutzer loggedInUser;
+    private String token;
 
     public Benutzer getLoggedInUser() {
         return loggedInUser;
@@ -21,5 +23,15 @@ public class UserSession implements Serializable {
 
     public boolean isUserInRole(Benutzergruppe benutzergruppe) {
         return loggedInUser != null && loggedInUser.getBenutzergruppe() == benutzergruppe; // Assuming Benutzer has a getRoles() method
+    }
+
+    public String getToken()
+    {
+        return token;
+    }
+
+    public void setToken(String token)
+    {
+        this.token = token;
     }
 }
