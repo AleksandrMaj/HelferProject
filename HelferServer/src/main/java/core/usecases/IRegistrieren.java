@@ -5,5 +5,5 @@ import facade.BenutzerTO;
 
 public interface IRegistrieren
 {
-    Benutzer neuenBenutzerRegistrieren(BenutzerTO benutzer);
+    Benutzer neuenBenutzerRegistrieren(Benutzer benutzer);
 }

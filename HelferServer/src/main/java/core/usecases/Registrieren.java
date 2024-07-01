@@ -1,25 +1,29 @@
 package core.usecases;
 
 import core.entities.Benutzer;
+import core.entities.Event;
 import core.enums.Benutzergruppe;
-import facade.BenutzerTO;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
+import java.util.LinkedList;
+
 @Stateless
-public class Registrieren implements IRegistrieren {
+public class Registrieren implements IRegistrieren
+{
     @EJB
     private BenutzerManager benutzerManager;
 
     @Override
-    public Benutzer neuenBenutzerRegistrieren(BenutzerTO benutzer)
+    public Benutzer neuenBenutzerRegistrieren(Benutzer benutzer)
     {
-        Benutzer newUser = benutzer.toBenutzer();
-        newUser.setBenutzergruppe(Benutzergruppe.MITGLIED);
+        if (benutzerManager.emailExists(benutzer.getEmail()))
+        {
+            throw new IllegalArgumentException("E-Mail bereits registriert");
+        }
 
-        //TODO: Check so that no E-Mail is getting used twice
-
-        benutzerManager.addBenutzer(newUser);
-        return newUser;
+        benutzer.setBenutzergruppe(Benutzergruppe.MITGLIED);
+        benutzer.setEvents(new LinkedList<>());
+        return benutzerManager.addBenutzer(benutzer);
     }
 }

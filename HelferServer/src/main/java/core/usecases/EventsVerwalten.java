@@ -21,6 +21,8 @@ public class EventsVerwalten implements IEventsVerwalten {
         return eventManager.getAllEvents();
     }
 
+    //TODO: Remove password and so on when getting list of helfers
+
     public Event eventBearbeiten(Event event) {
         return eventManager.modifyEvent(event);
     }

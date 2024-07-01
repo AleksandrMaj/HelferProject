@@ -22,32 +22,44 @@ public class ServicesBenutzer
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(BenutzerTO user) {
-        Benutzer benutzer = anmelden.einloggen(user);
+        try {
+            Benutzer benutzer = anmelden.einloggen(user.toBenutzer());
 
-        if (benutzer != null) {
-            return Response.status(Response.Status.OK).entity(benutzer).type(MediaType.APPLICATION_JSON).build();
+            if (benutzer != null) {
+                return Response.ok(benutzer).build();
+            }
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("E-Mail oder Passwort falsch")
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Anmeldung aufgrund eines Serverfehlers fehlgeschlagen")
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
         }
-
-        return Response.status(Response.Status.NOT_FOUND).entity("E-Mail oder Passwort falsch").type(MediaType.TEXT_PLAIN).build();
     }
 
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(BenutzerTO newBenutzer) {
+    public Response register(BenutzerTO newUser) {
         try {
-            Benutzer benutzer = registrieren.neuenBenutzerRegistrieren(newBenutzer);
+            Benutzer user = registrieren.neuenBenutzerRegistrieren(newUser.toBenutzer());
 
-            // Return a success response
             return Response.status(Response.Status.CREATED)
-                    .entity(benutzer)
+                    .entity(user)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
         } catch (Exception e) {
-            // Handle exceptions and return an error response
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Registrierung fehlgeschlagen")
+                    .entity("Registrierung aufgrund eines Server-Fehlers fehlgeschlagen")
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
