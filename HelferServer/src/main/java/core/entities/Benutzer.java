@@ -2,6 +2,7 @@ package core.entities;
 
 import core.enums.Benutzergruppe;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Benutzer {
@@ -12,7 +13,7 @@ public class Benutzer {
     private Benutzergruppe benutzergruppe;
     private String email;
     private String passwort;
-    private List<Event> events;
+    private List<Event> events = new LinkedList<>();
 
     public Benutzer()
     {

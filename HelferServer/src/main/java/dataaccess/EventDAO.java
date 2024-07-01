@@ -1,6 +1,5 @@
 package dataaccess;
 
-
 import core.entities.Event;
 import jakarta.ejb.Singleton;
 
