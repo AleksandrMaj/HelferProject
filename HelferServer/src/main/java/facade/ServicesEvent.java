@@ -49,30 +49,40 @@ public class ServicesEvent
 
     @GET
     @Path("/{id}")
-    public Response getEventById(@PathParam("id") int id, @HeaderParam("Authentication") String token)
-    {
-        try
-        {
-            if (!Authentication.tokenIsValid(token))
-            {
+    public Response getEventById(@PathParam("id") int id, @HeaderParam("Authentication") String token) {
+        try {
+            if (!Authentication.tokenIsValid(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
             }
 
             Benutzer user = Authentication.getUserFromToken(token);
 
             Event event = eventsVerwalten.getEventById(id);
-            if (event == null)
-            {
+
+            if (event == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("Event nicht gefunden").build();
             }
 
-            Event filteredEvent = filterHelferListe(event, user);
-            return Response.ok(filteredEvent).build();
-        } catch (Exception e)
-        {
+            if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED) {
+                event.setHelferListe(new LinkedList<>());
+                event.getOrganisator().anonymize();
+            } else if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR) {
+                if (!event.getOrganisator().equals(user)) {
+                    List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
+                            .peek(Benutzer::anonymize)
+                            .toList();
+
+                    event.setHelferListe(anonymHelferListe);
+                    event.getOrganisator().anonymizeForOrganisatorView();
+                }
+            }
+
+            return Response.ok(event).build();
+        } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Server-Fehler beim Abrufen des Events").build();
         }
     }
+
 
     @GET
     public Response getAllEvents(@HeaderParam("Authentication") String token)
@@ -84,12 +94,11 @@ public class ServicesEvent
                     .peek(event ->
                     {
                         List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                                .map(helfer -> new Benutzer(0, "", "", new Adresse(), Benutzergruppe.MITGLIED, "", "", new LinkedList<>()))
+                                .peek(Benutzer::anonymize)
                                 .toList();
                         event.setHelferListe(anonymHelferListe);
 
-                        Benutzer organisator = event.getOrganisator();
-                        event.setOrganisator(new Benutzer(0, organisator.getName(), organisator.getVorname(), new Adresse(), Benutzergruppe.ORGANISATOR, "", "", new LinkedList<>()));
+                        event.getOrganisator().anonymize();
                     })
                     .toList();
 
@@ -156,7 +165,7 @@ public class ServicesEvent
         if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED)
         {
             List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                    .map(helfer -> new Benutzer(0, "", "", new Adresse(), Benutzergruppe.MITGLIED, "", "", new LinkedList<>()))
+                    .peek(Benutzer::anonymize)
                     .toList();
             event.setHelferListe(anonymHelferListe);
         } else if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR && !event.getOrganisator().equals(user))
