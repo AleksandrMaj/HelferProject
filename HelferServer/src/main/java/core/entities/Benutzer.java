@@ -119,7 +119,7 @@ public class Benutzer {
         this.passwort = "";
     }
 
-    public void anonymizeForOrganisatorView() {
+    public void anonymizeWithoutName() {
         this.adresse = new Adresse();
         this.email = "";
         this.passwort = "";

@@ -1,6 +1,5 @@
 package facade;
 
-import core.entities.Adresse;
 import core.entities.Benutzer;
 import core.entities.Event;
 import core.enums.Benutzergruppe;
@@ -64,8 +63,12 @@ public class ServicesEvent
             }
 
             if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED) {
-                event.setHelferListe(new LinkedList<>());
-                event.getOrganisator().anonymize();
+                List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
+                        .peek(Benutzer::anonymize)
+                        .toList();
+                event.setHelferListe(anonymHelferListe);
+
+                event.getOrganisator().anonymizeWithoutName();
             } else if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR) {
                 if (!event.getOrganisator().equals(user)) {
                     List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
@@ -73,7 +76,7 @@ public class ServicesEvent
                             .toList();
 
                     event.setHelferListe(anonymHelferListe);
-                    event.getOrganisator().anonymizeForOrganisatorView();
+                    event.getOrganisator().anonymizeWithoutName();
                 }
             }
 
@@ -98,7 +101,7 @@ public class ServicesEvent
                                 .toList();
                         event.setHelferListe(anonymHelferListe);
 
-                        event.getOrganisator().anonymize();
+                        event.getOrganisator().anonymizeWithoutName();
                     })
                     .toList();
 
@@ -175,3 +178,5 @@ public class ServicesEvent
         return event;
     }
 }
+
+//TODO: So viel Logik in den Use-Case auslagern, damit im Controller weniger ist
