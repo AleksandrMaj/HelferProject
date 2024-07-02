@@ -62,7 +62,7 @@ public class AnmeldenMB
         {
             Benutzer benutzer = response.readEntity(Benutzer.class);
             userSession.setLoggedInUser(benutzer);
-            userSession.setToken(response.getHeaderString("Authentification").substring("Bearer ".length()));
+            userSession.setToken(response.getHeaderString("Authentication").substring("Bearer ".length()));
             return "home?faces-redirect=true";
         }
 

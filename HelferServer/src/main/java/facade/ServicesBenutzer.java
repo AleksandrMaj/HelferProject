@@ -34,7 +34,7 @@ public class ServicesBenutzer
             {
                 return Response
                         .ok(benutzer)
-                        .header("Authentification", "Bearer " + Authentification.generateToken(benutzer.getId()))
+                        .header("Authentication", "Bearer " + Authentification.generateToken(benutzer.getId()))
                         .build();
             }
             return Response.status(Response.Status.UNAUTHORIZED)
