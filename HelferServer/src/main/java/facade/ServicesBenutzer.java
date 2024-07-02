@@ -1,7 +1,7 @@
 package facade;
 
 import core.entities.Benutzer;
-import core.services.Authentification;
+import core.services.Authentication;
 import core.usecases.IAnmelden;
 import core.usecases.IRegistrieren;
 import jakarta.ejb.EJB;
@@ -34,7 +34,7 @@ public class ServicesBenutzer
             {
                 return Response
                         .ok(benutzer)
-                        .header("Authentification", "Bearer " + Authentification.generateToken(benutzer.getId()))
+                        .header("Authentication", "Bearer " + Authentication.generateToken(benutzer.getId()))
                         .build();
             }
             return Response.status(Response.Status.UNAUTHORIZED)
