@@ -126,14 +126,14 @@ public class ServicesEvent
     @Path("/{id}")
     public Response deleteEvent(@PathParam("id") int id, @HeaderParam("Authentication") String token)
     {
-        if (Authentication.tokenIsValid(token))
-        {
-            Benutzer user = Authentication.getUserFromToken(token);
-            Event event = eventsVerwalten.getEventById(id);
+        if (!Authentication.tokenIsValid(token))
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-            if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR || event.getOrganisator().getId() != user.getId())
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
-        }
+        Benutzer user = Authentication.getUserFromToken(token);
+        Event event = eventsVerwalten.getEventById(id);
+
+        if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR || event.getOrganisator().getId() != user.getId())
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
         try
         {
@@ -143,5 +143,29 @@ public class ServicesEvent
         {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Server-Fehler beim Löschen des Events").build();
         }
+    }
+
+    @POST
+    @Path("/{id}/helfer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addHelfer(@PathParam("id") int id, @HeaderParam("Authentication") String token)
+    {
+        if (!Authentication.tokenIsValid(token))
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
+
+        Benutzer user = Authentication.getUserFromToken(token);
+        Event event = eventsVerwalten.getEventById(id);
+
+        if (event == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("Kein Event zu dieser ID").build();
+
+        if (event.getHelferListe().contains(user))
+        {
+            eventsVerwalten.removeHelfer(id, user);
+            return Response.ok().build();
+        }
+        eventsVerwalten.addHelfer(id, user);
+        return Response.ok().build();
     }
 }

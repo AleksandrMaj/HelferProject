@@ -8,23 +8,29 @@ import jakarta.ejb.Stateless;
 import java.util.List;
 
 @Stateless
-public class EventsVerwalten implements IEventsVerwalten {
+public class EventsVerwalten implements IEventsVerwalten
+{
 
     @EJB
     private EventManager eventManager;
 
     @Override
-    public Event eventsAnlegen(Event event) {
+    public Event eventsAnlegen(Event event)
+    {
         return eventManager.addEvent(event);
     }
 
-    public List<Event> getAllEvents() {
+    @Override
+    public List<Event> getAllEvents()
+    {
         List<Event> events = eventManager.getAllEvents();
 
         return events.stream()
-                .map(event -> {
+                .map(event ->
+                {
                     List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                            .map(helfer -> {
+                            .map(helfer ->
+                            {
                                 helfer.anonymize();
                                 return helfer;
                             })
@@ -37,24 +43,41 @@ public class EventsVerwalten implements IEventsVerwalten {
                 .toList();
     }
 
+    @Override
     public Event getEventById(int id)
     {
         Event event = eventManager.getEventById(id);
         event.getOrganisator().anonymizeWithoutName();
         event.getHelferListe().stream().map(helfer ->
         {
-           helfer.anonymizeWithoutName();
-           return helfer;
+            helfer.anonymizeWithoutName();
+            return helfer;
         });
 
         return event;
     }
 
-    public Event eventBearbeiten(Event event) {
+    @Override
+    public Event eventBearbeiten(Event event)
+    {
         return eventManager.modifyEvent(event);
     }
 
-    public boolean eventLoeschen(int id) {
-         return eventManager.deleteEvent(id);
+    @Override
+    public boolean eventLoeschen(int id)
+    {
+        return eventManager.deleteEvent(id);
+    }
+
+    @Override
+    public boolean addHelfer(int eventID, Benutzer user)
+    {
+        return eventManager.addHelfer(eventID, user);
+    }
+
+    @Override
+    public boolean removeHelfer(int eventID, Benutzer user)
+    {
+        return eventManager.removeHelfer(eventID, user);
     }
 }

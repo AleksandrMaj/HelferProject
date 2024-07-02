@@ -1,5 +1,6 @@
 package dataaccess;
 
+import core.entities.Benutzer;
 import core.entities.Event;
 import jakarta.ejb.Singleton;
 
@@ -29,7 +30,8 @@ public class EventDAO
         return eventEntities.stream().map(EventEntity::toEvent).toList();
     }
 
-    public Event findEventById(int id) {
+    public Event findEventById(int id)
+    {
         EventEntity eventEntity = em.find(EventEntity.class, id);
         return eventEntity != null ? eventEntity.toEvent() : null;
     }
@@ -58,6 +60,35 @@ public class EventDAO
         if (eventEntity != null)
         {
             em.remove(eventEntity);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addHelfer(int eventID, Benutzer user)
+    {
+        EventEntity eventEntity = em.find(EventEntity.class, eventID);
+        if (eventEntity == null) return false;
+        BenutzerEntity benutzerEntity = new BenutzerEntity(user);
+        if (!eventEntity.getHelferListe().contains(benutzerEntity))
+        {
+            eventEntity.getHelferListe().add(benutzerEntity);
+            em.merge(eventEntity);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeHelfer(int eventID, Benutzer user)
+    {
+        EventEntity eventEntity = em.find(EventEntity.class, eventID);
+        if (eventEntity == null) return false;
+
+        BenutzerEntity benutzerEntity = new BenutzerEntity(user);
+        if (eventEntity.getHelferListe().contains(benutzerEntity))
+        {
+            eventEntity.getHelferListe().remove(benutzerEntity);
+            em.merge(eventEntity);
             return true;
         }
         return false;
