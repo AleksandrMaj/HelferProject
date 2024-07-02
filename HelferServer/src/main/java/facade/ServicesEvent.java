@@ -48,67 +48,49 @@ public class ServicesEvent
 
     @GET
     @Path("/{id}")
-    public Response getEventById(@PathParam("id") int id, @HeaderParam("Authentication") String token) {
-        try {
-            if (!Authentication.tokenIsValid(token)) {
+    public Response getEventById(@PathParam("id") int id, @HeaderParam("Authentication") String token)
+    {
+        try
+        {
+            if (!Authentication.tokenIsValid(token))
+            {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
             }
-
             Benutzer user = Authentication.getUserFromToken(token);
 
             Event event = eventsVerwalten.getEventById(id);
-
-            if (event == null) {
+            if (event == null)
+            {
                 return Response.status(Response.Status.NOT_FOUND).entity("Event nicht gefunden").build();
             }
 
-            if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED) {
-                List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                        .peek(Benutzer::anonymize)
-                        .toList();
-                event.setHelferListe(anonymHelferListe);
-
-                event.getOrganisator().anonymizeWithoutName();
-            } else if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR) {
-                if (!event.getOrganisator().equals(user)) {
-                    List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                            .peek(Benutzer::anonymize)
-                            .toList();
-
-                    event.setHelferListe(anonymHelferListe);
-                    event.getOrganisator().anonymizeWithoutName();
-                }
+            if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED || user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR && !event.getOrganisator().equals(user))
+            {
+                event.getHelferListe().stream().map(helfer ->
+                {
+                    helfer.anonymize();
+                    return helfer;
+                });
             }
 
             return Response.ok(event).build();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Server-Fehler beim Abrufen des Events").build();
         }
     }
 
 
     @GET
-    public Response getAllEvents(@HeaderParam("Authentication") String token)
+    public Response getAllEvents()
     {
         try
         {
             List<Event> events = eventsVerwalten.getAllEvents();
-            List<Event> anonymizedEvents = events.stream()
-                    .peek(event ->
-                    {
-                        List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                                .peek(Benutzer::anonymize)
-                                .toList();
-                        event.setHelferListe(anonymHelferListe);
-
-                        event.getOrganisator().anonymizeWithoutName();
-                    })
-                    .toList();
-
-            if (anonymizedEvents.isEmpty())
+            if (events.isEmpty())
                 return Response.status(Response.Status.NO_CONTENT).build();
 
-            return Response.ok(anonymizedEvents).build();
+            return Response.ok(events).build();
         } catch (Exception e)
         {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Server-Fehler beim Abrufen der Events").build();
@@ -162,21 +144,4 @@ public class ServicesEvent
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Server-Fehler beim Löschen des Events").build();
         }
     }
-
-    private Event filterHelferListe(Event event, Benutzer user)
-    {
-        if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED)
-        {
-            List<Benutzer> anonymHelferListe = event.getHelferListe().stream()
-                    .peek(Benutzer::anonymize)
-                    .toList();
-            event.setHelferListe(anonymHelferListe);
-        } else if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR && !event.getOrganisator().equals(user))
-        {
-            event.setHelferListe(new LinkedList<>());
-        }
-        return event;
-    }
 }
-
-//TODO: So viel Logik in den Use-Case auslagern, damit im Controller weniger ist
