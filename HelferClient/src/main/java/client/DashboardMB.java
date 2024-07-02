@@ -1,6 +1,7 @@
 package client;
 
 import entities.Event;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -14,23 +15,32 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
 @RequestScoped
-public class EventMB {
+public class DashboardMB {
 
     private Client client;
     private WebTarget target;
     private Event event;
     private List<Event> events;
+    private List<Event> myEvents;
 
-    public EventMB() {
+    @Inject
+    UserSession userSession;
+
+    public DashboardMB() {
         client = ClientBuilder.newClient();
-        target = client.target("http://localhost:8080/HelferServer/webapi/event");
+        target = client.target(Environment.BASE + "/event");
         event = new Event();
+    }
+
+    @PostConstruct
+    public void init() {
         loadEvents();
+        loadMyEvents();
     }
 
     public void loadEvents() {
@@ -45,16 +55,29 @@ public class EventMB {
         }
     }
 
+    public void loadMyEvents() {
+        if (userSession.isOrganisator()) {
+            myEvents = events.stream()
+                    .filter(e -> e.getOrganisator().getId() == userSession.getLoggedInUser().getId() ||
+                            e.getHelferListe().stream().anyMatch(h -> h.getId() == userSession.getLoggedInUser().getId()))
+                    .collect(Collectors.toList());
+            return;
+        }
+        myEvents = userSession.getLoggedInUser().getEvents();
+    }
+
     public String createEvent() {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
+                .header("Authentication", userSession.getToken())
                 .post(Entity.json(event));
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich erstellt"));
             loadEvents(); // Liste aktualisieren
+            loadMyEvents(); // Persönliche Events aktualisieren
             event = new Event(); // Formular zurücksetzen
-            return "home?faces-redirect=true";
+            return "dashboard?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Erstellen des Events", null));
             return null;
@@ -64,12 +87,14 @@ public class EventMB {
     public String updateEvent() {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
+                .header("Authentication", userSession.getToken())
                 .put(Entity.json(event));
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
             loadEvents(); // Liste aktualisieren
-            return "home?faces-redirect=true";
+            loadMyEvents(); // Persönliche Events aktualisieren
+            return "dashboard?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Aktualisieren des Events", null));
             return null;
@@ -79,11 +104,14 @@ public class EventMB {
     public String deleteEvent(int id) {
         Response response = target
                 .path(String.valueOf(id))
-                .request(MediaType.APPLICATION_JSON).delete();
+                .request(MediaType.APPLICATION_JSON)
+                .header("Authentication", userSession.getToken())
+                .delete();
         if (response.getStatus() == 204) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
-            loadEvents(); // Liste aktualisieren
-            return "home?faces-redirect=true";
+            loadEvents();
+            loadMyEvents(); // Liste aktualisieren
+            return "dashboard?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Löschen des Events", null));
             return null;
@@ -107,4 +135,11 @@ public class EventMB {
         this.events = events;
     }
 
+    public List<Event> getMyEvents() {
+        return myEvents;
+    }
+
+    public void setMyEvents(List<Event> myEvents) {
+        this.myEvents = myEvents;
+    }
 }

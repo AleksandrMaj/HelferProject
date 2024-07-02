@@ -28,8 +28,8 @@ public class UserSession implements Serializable {
         return loggedInUser != null && loggedInUser.getBenutzergruppe() == benutzergruppe; // Assuming Benutzer has a getRoles() method
     }
 
-    public boolean isAdmin() {
-        return loggedInUser != null && loggedInUser.getBenutzergruppe() == Benutzergruppe.ADMIN;
+    public boolean isOrganisator() {
+        return loggedInUser != null && loggedInUser.getBenutzergruppe() == Benutzergruppe.ORGANISATOR;
     }
     public String logout()
     {

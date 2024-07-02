@@ -46,10 +46,10 @@ CREATE INDEX idx_eventID ON Helfer (eventID);
 
 -- Insert example data
 INSERT INTO Benutzer (name, vorname, strasse, hausnummer, stadt, plz, benutzergruppe, email, passwort)
-VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ADMIN', 'max.mustermann@example.com', 'password123'),
+VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ORGANISATOR', 'max.mustermann@example.com', 'password123'),
        ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'MITGLIED', 'john.doe@example.com', 'password456'),
        ('Smith', 'Jane', 'Second St', '456', 'Example Town', '10101', 'MITGLIED', 'jane.smith@example.com', 'password789'),
-       ('Brown', 'Charlie', 'Third Ave', '789', 'Testville', '20202', 'ADMIN', 'charlie.brown@example.com', 'password321');
+       ('Brown', 'Charlie', 'Third Ave', '789', 'Testville', '20202', 'ORGANISATOR', 'charlie.brown@example.com', 'password321');
 
 -- Insert a sample Event
 INSERT INTO Event (name, date, organisatorID)
