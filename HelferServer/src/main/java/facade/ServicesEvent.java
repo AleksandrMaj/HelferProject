@@ -5,6 +5,7 @@ import core.entities.Event;
 import core.enums.Benutzergruppe;
 import core.services.Authentication;
 import core.usecases.IEventsVerwalten;
+import core.usecases.IHelferVerwalten;
 import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -20,6 +21,8 @@ public class ServicesEvent
 {
     @EJB
     private IEventsVerwalten eventsVerwalten;
+    @EJB
+    IHelferVerwalten helferVerwalten;
 
     @Inject
     private Authentication authentication;
@@ -42,7 +45,7 @@ public class ServicesEvent
         {
             Event newEvent = event.toEvent();
             newEvent.setOrganisator(user);
-            Event createdEvent = eventsVerwalten.eventsAnlegen(newEvent);
+            Event createdEvent = eventsVerwalten.eventAnlegen(newEvent);
             return Response.status(Response.Status.CREATED).entity(createdEvent).build();
         } catch (Exception e)
         {
@@ -179,10 +182,10 @@ public class ServicesEvent
 
         if (event.getHelferListe().stream().anyMatch(helfer -> helfer.getId() == user.getId()))
         {
-            eventsVerwalten.removeHelfer(id, user);
+            helferVerwalten.removeHelfer(id, user);
             return Response.ok().build();
         }
-        eventsVerwalten.addHelfer(id, user);
+        helferVerwalten.addHelfer(id, user);
         return Response.ok().build();
     }
 }

@@ -15,7 +15,7 @@ public class EventsVerwalten implements IEventsVerwalten
     private EventManager eventManager;
 
     @Override
-    public Event eventsAnlegen(Event event)
+    public Event eventAnlegen(Event event)
     {
         return eventManager.addEvent(event);
     }
@@ -59,17 +59,5 @@ public class EventsVerwalten implements IEventsVerwalten
     public boolean eventLoeschen(int id)
     {
         return eventManager.deleteEvent(id);
-    }
-
-    @Override
-    public boolean addHelfer(int eventID, Benutzer user)
-    {
-        return eventManager.addHelfer(eventID, user);
-    }
-
-    @Override
-    public boolean removeHelfer(int eventID, Benutzer user)
-    {
-        return eventManager.removeHelfer(eventID, user);
     }
 }

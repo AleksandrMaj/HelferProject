@@ -15,15 +15,15 @@ public class Registrieren implements IRegistrieren
     private BenutzerManager benutzerManager;
 
     @Override
-    public Benutzer neuenBenutzerRegistrieren(Benutzer benutzer)
+    public Benutzer neuenBenutzerRegistrieren(Benutzer user)
     {
-        if (benutzerManager.emailExists(benutzer.getEmail()))
+        if (benutzerManager.emailExists(user.getEmail()))
         {
             throw new IllegalArgumentException("E-Mail bereits registriert");
         }
 
-        benutzer.setBenutzergruppe(Benutzergruppe.MITGLIED);
-        benutzer.setEvents(new LinkedList<>());
-        return benutzerManager.addBenutzer(benutzer);
+        user.setBenutzergruppe(Benutzergruppe.MITGLIED);
+        user.setEvents(new LinkedList<>());
+        return benutzerManager.addBenutzer(user);
     }
 }
