@@ -4,7 +4,8 @@ import core.entities.Event;
 
 import java.util.List;
 
-public interface IEventsVerwalten {
+public interface IEventsVerwalten
+{
 
     Event eventsAnlegen(Event event);
 
@@ -13,4 +14,6 @@ public interface IEventsVerwalten {
     boolean eventLoeschen(int id);
 
     List<Event> getAllEvents();
+
+    Event getEventById(int id);
 }

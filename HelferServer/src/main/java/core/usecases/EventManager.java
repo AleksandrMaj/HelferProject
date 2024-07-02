@@ -24,6 +24,11 @@ public class EventManager
         return eventDAO.findAllEvents();
     }
 
+    public Event getEventById(int id)
+    {
+        return eventDAO.findEventById(id);
+    }
+
     public Event modifyEvent(Event event)
     {
         return eventDAO.modifyEvent(event);

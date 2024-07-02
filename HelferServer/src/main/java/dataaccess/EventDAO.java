@@ -29,11 +29,11 @@ public class EventDAO
         return eventEntities.stream().map(EventEntity::toEvent).toList();
     }
 
-    public Optional<Event> findEventById(int id)
-    {
+    public Event findEventById(int id) {
         EventEntity eventEntity = em.find(EventEntity.class, id);
-        return eventEntity != null ? Optional.of(eventEntity.toEvent()) : Optional.empty();
+        return eventEntity != null ? eventEntity.toEvent() : null;
     }
+
 
     public Event modifyEvent(Event event)
     {

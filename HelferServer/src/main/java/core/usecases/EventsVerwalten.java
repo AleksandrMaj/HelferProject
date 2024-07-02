@@ -21,6 +21,11 @@ public class EventsVerwalten implements IEventsVerwalten {
         return eventManager.getAllEvents();
     }
 
+    public Event getEventById(int id)
+    {
+        return eventManager.getEventById(id);
+    }
+
     public Event eventBearbeiten(Event event) {
         return eventManager.modifyEvent(event);
     }
