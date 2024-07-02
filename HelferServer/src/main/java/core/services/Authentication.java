@@ -8,10 +8,9 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Singleton
-public class Authentification
+public class Authentication
 {
     private static final String SECRET_KEY = "EventMaster";
     private static final Map<String, Integer> tokenStore = new HashMap<>();
@@ -25,7 +24,7 @@ public class Authentification
         return token;
     }
 
-    public static boolean validateToken(String token) {
+    public static boolean tokenIsValid(String token) {
         return tokenStore.containsKey(token);
     }
 

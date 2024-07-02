@@ -110,4 +110,18 @@ public class Benutzer {
     {
         this.events = events;
     }
+
+    public void anonymize() {
+        this.name = "";
+        this.vorname = "";
+        this.adresse = new Adresse();
+        this.email = "";
+        this.passwort = "";
+    }
+
+    public void anonymizeWithoutName() {
+        this.adresse = new Adresse();
+        this.email = "";
+        this.passwort = "";
+    }
 }

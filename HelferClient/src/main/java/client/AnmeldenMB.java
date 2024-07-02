@@ -11,11 +11,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Named
 @RequestScoped
@@ -66,7 +62,7 @@ public class AnmeldenMB
         {
             Benutzer benutzer = response.readEntity(Benutzer.class);
             userSession.setLoggedInUser(benutzer);
-            userSession.setToken(response.getHeaderString("Authentification").substring("Bearer ".length()));
+            userSession.setToken(response.getHeaderString("Authentication").substring("Bearer ".length()));
             return "home?faces-redirect=true";
         }
 
@@ -78,4 +74,3 @@ public class AnmeldenMB
         return "";
     }
 }
-
