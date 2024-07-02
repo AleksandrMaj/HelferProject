@@ -16,20 +16,20 @@ public class Authentication
     private static final Map<String, Integer> tokenStore = new HashMap<>();
 
     @EJB
-    private static BenutzerManager benutzerManager;
+    private BenutzerManager benutzerManager;
 
-    public static String generateToken(int userID) {
+    public String generateToken(int userID) {
         String token = Base64.getEncoder().encodeToString((userID + ":" + UUID.randomUUID().toString() + ":" + SECRET_KEY).getBytes());
         tokenStore.put(token, userID);
         return token;
     }
 
-    public static boolean tokenIsValid(String token) {
-        return tokenStore.containsKey(token);
+    public boolean tokenIsValid(String token) {
+        return tokenStore.containsKey(token.substring("Bearer ".length()));
     }
 
-    public static Benutzer getUserFromToken(String token) {
-        int userID = tokenStore.get(token);
+    public Benutzer getUserFromToken(String token) {
+        int userID = tokenStore.get(token.substring("Bearer ".length()));
         return benutzerManager.findById(userID);
     }
 
