@@ -6,11 +6,11 @@ import core.enums.Benutzergruppe;
 import core.services.Authentication;
 import core.usecases.IEventsVerwalten;
 import jakarta.ejb.EJB;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Path("/event")
@@ -21,16 +21,18 @@ public class ServicesEvent
     @EJB
     private IEventsVerwalten eventsVerwalten;
 
+    @Inject
+    private Authentication authentication;
+
     @POST
     public Response createEvent(EventTO event, @HeaderParam("Authentication") String token)
     {
-        if (Authentication.tokenIsValid(token))
-        {
-            Benutzer user = Authentication.getUserFromToken(token);
+        if (!authentication.tokenIsValid(token))
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-            if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR)
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
-        }
+        Benutzer user = authentication.getUserFromToken(token);
+        if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR)
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
         if (event == null)
         {
@@ -38,7 +40,9 @@ public class ServicesEvent
         }
         try
         {
-            Event createdEvent = eventsVerwalten.eventsAnlegen(event.toEvent());
+            Event newEvent = event.toEvent();
+            newEvent.setOrganisator(user);
+            Event createdEvent = eventsVerwalten.eventsAnlegen(newEvent);
             return Response.status(Response.Status.CREATED).entity(createdEvent).build();
         } catch (Exception e)
         {
@@ -52,25 +56,31 @@ public class ServicesEvent
     {
         try
         {
-            if (!Authentication.tokenIsValid(token))
-            {
+            if (!authentication.tokenIsValid(token))
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
-            }
-            Benutzer user = Authentication.getUserFromToken(token);
+
+            Benutzer user = authentication.getUserFromToken(token);
 
             Event event = eventsVerwalten.getEventById(id);
             if (event == null)
-            {
                 return Response.status(Response.Status.NOT_FOUND).entity("Event nicht gefunden").build();
-            }
 
-            if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED || user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR && !event.getOrganisator().equals(user))
+            //TODO: CHECK
+            event.getOrganisator().anonymizeWithoutName();
+            event.getHelferListe().stream().map(helfer ->
             {
-                event.getHelferListe().stream().map(helfer ->
+                helfer.anonymizeWithoutName();
+                return helfer;
+            });
+
+            if (user.getBenutzergruppe() == Benutzergruppe.MITGLIED || user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR && event.getOrganisator().getId() != user.getId())
+            {
+                List<Benutzer> anonymizedEvents = event.getHelferListe().stream().map(helfer ->
                 {
                     helfer.anonymize();
                     return helfer;
-                });
+                }).toList();
+                event.setHelferListe(anonymizedEvents);
             }
 
             return Response.ok(event).build();
@@ -98,23 +108,27 @@ public class ServicesEvent
     }
 
     @PUT
-    public Response updateEvent(EventTO event, @HeaderParam("Authentication") String token)
+    public Response updateEvent(EventTO modifiedEventTO, @HeaderParam("Authentication") String token)
     {
-        if (Authentication.tokenIsValid(token))
-        {
-            Benutzer user = Authentication.getUserFromToken(token);
+        if (!authentication.tokenIsValid(token))
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-            if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR || event.organisator().getId() != user.getId())
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
-        }
-
-        if (event == null || event.id() == 0)
-        {
+        if (modifiedEventTO.id() == 0)
             return Response.status(Response.Status.BAD_REQUEST).entity("Event-ID ist für die Aktualisierung erforderlich").build();
-        }
+
+        Benutzer user = authentication.getUserFromToken(token);
+        Event modifiedEvent = modifiedEventTO.toEvent();
+        Event oldEvent = eventsVerwalten.getEventById(modifiedEvent.getId());
+
+        if (oldEvent == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("Event nicht gefunden").build();
+
+        if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR || oldEvent.getOrganisator().getId() != user.getId())
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
+
         try
         {
-            Event updatedEvent = eventsVerwalten.eventBearbeiten(event.toEvent());
+            Event updatedEvent = eventsVerwalten.eventBearbeiten(modifiedEvent);
             return Response.ok(updatedEvent).build();
         } catch (Exception e)
         {
@@ -126,10 +140,10 @@ public class ServicesEvent
     @Path("/{id}")
     public Response deleteEvent(@PathParam("id") int id, @HeaderParam("Authentication") String token)
     {
-        if (!Authentication.tokenIsValid(token))
+        if (!authentication.tokenIsValid(token))
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-        Benutzer user = Authentication.getUserFromToken(token);
+        Benutzer user = authentication.getUserFromToken(token);
         Event event = eventsVerwalten.getEventById(id);
 
         if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR || event.getOrganisator().getId() != user.getId())
@@ -149,18 +163,21 @@ public class ServicesEvent
     @Path("/{id}/helfer")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addHelfer(@PathParam("id") int id, @HeaderParam("Authentication") String token)
+    public Response toggleHelfer(@PathParam("id") int id, @HeaderParam("Authentication") String token)
     {
-        if (!Authentication.tokenIsValid(token))
+        if (!authentication.tokenIsValid(token))
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-        Benutzer user = Authentication.getUserFromToken(token);
+        Benutzer user = authentication.getUserFromToken(token);
+        if(user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR)
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
+
         Event event = eventsVerwalten.getEventById(id);
 
         if (event == null)
             return Response.status(Response.Status.NOT_FOUND).entity("Kein Event zu dieser ID").build();
 
-        if (event.getHelferListe().contains(user))
+        if (event.getHelferListe().stream().anyMatch(helfer -> helfer.getId() == user.getId()))
         {
             eventsVerwalten.removeHelfer(id, user);
             return Response.ok().build();

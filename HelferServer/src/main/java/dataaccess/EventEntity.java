@@ -12,7 +12,7 @@ import java.util.List;
 public class EventEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -117,6 +117,7 @@ public class EventEntity
                 .map(benutzerEntity ->
                 {
                     Benutzer user = new Benutzer();
+                    user.setId(benutzerEntity.getId());
                     user.setVorname(benutzerEntity.getVorname());
                     user.setName(benutzerEntity.getName());
                     return user;

@@ -42,11 +42,8 @@ public class EventDAO
         EventEntity eventEntity = em.find(EventEntity.class, event.getId());
         if (eventEntity != null)
         {
-            //TODO: test if this is working properly after protecting routes
             eventEntity.setName(event.getName());
             eventEntity.setDate(event.getDate());
-            eventEntity.setOrganisator(new BenutzerEntity(event.getOrganisator()));
-            eventEntity.setHelferListe(event.getHelferListe().stream().map(BenutzerEntity::new).toList());
 
             em.merge(eventEntity);
             return eventEntity.toEvent();
@@ -84,10 +81,16 @@ public class EventDAO
         EventEntity eventEntity = em.find(EventEntity.class, eventID);
         if (eventEntity == null) return false;
 
-        BenutzerEntity benutzerEntity = new BenutzerEntity(user);
-        if (eventEntity.getHelferListe().contains(benutzerEntity))
-        {
-            eventEntity.getHelferListe().remove(benutzerEntity);
+        BenutzerEntity helperToRemove = null;
+        for (BenutzerEntity helfer : eventEntity.getHelferListe()) {
+            if (helfer.getId() == user.getId()) {
+                helperToRemove = helfer;
+                break;
+            }
+        }
+
+        if (helperToRemove != null) {
+            eventEntity.getHelferListe().remove(helperToRemove);
             em.merge(eventEntity);
             return true;
         }

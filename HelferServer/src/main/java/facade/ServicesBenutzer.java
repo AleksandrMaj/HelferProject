@@ -5,6 +5,7 @@ import core.services.Authentication;
 import core.usecases.IAnmelden;
 import core.usecases.IRegistrieren;
 import jakarta.ejb.EJB;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -19,6 +20,8 @@ public class ServicesBenutzer
     private IAnmelden anmelden;
     @EJB
     private IRegistrieren registrieren;
+    @Inject
+    private Authentication authentication;
 
     @POST
     @Path("/login")
@@ -34,7 +37,7 @@ public class ServicesBenutzer
             {
                 return Response
                         .ok(benutzer)
-                        .header("Authentication", "Bearer " + Authentication.generateToken(benutzer.getId()))
+                        .header("Authentication", "Bearer " + authentication.generateToken(benutzer.getId()))
                         .build();
             }
             return Response.status(Response.Status.UNAUTHORIZED)

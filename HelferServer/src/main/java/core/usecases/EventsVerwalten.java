@@ -46,15 +46,7 @@ public class EventsVerwalten implements IEventsVerwalten
     @Override
     public Event getEventById(int id)
     {
-        Event event = eventManager.getEventById(id);
-        event.getOrganisator().anonymizeWithoutName();
-        event.getHelferListe().stream().map(helfer ->
-        {
-            helfer.anonymizeWithoutName();
-            return helfer;
-        });
-
-        return event;
+        return eventManager.getEventById(id);
     }
 
     @Override
