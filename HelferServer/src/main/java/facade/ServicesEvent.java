@@ -188,5 +188,5 @@ public class ServicesEvent
         }
         helferVerwalten.addHelfer(id, user);
         return Response.ok(event).build();
-    }
+    } //TODO: Anonynmize helferListe
 }

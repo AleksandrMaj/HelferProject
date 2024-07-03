@@ -76,7 +76,7 @@ public class DashboardMB {
                 .header("Authentication", userSession.getToken())
                 .post(Entity.json(event));
 
-        if (response.getStatus() == 200) {
+        if (response.getStatus() == 201) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich erstellt"));
             loadEvents(); // Liste aktualisieren
             loadMyEvents(); // Persönliche Events aktualisieren
