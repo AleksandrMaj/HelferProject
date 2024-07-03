@@ -84,40 +84,6 @@ public class DashboardMB {
         }
     }
 
-    public String updateEvent() {
-        Response response = target
-                .request(MediaType.APPLICATION_JSON)
-                .header("Authentication", userSession.getToken())
-                .put(Entity.json(event));
-
-        if (response.getStatus() == 200) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
-            loadEvents(); // Liste aktualisieren
-            loadMyEvents(); // Persönliche Events aktualisieren
-            return "dashboard?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Aktualisieren des Events", null));
-            return null;
-        }
-    }
-
-    public String deleteEvent(int id) {
-        Response response = target
-                .path(String.valueOf(id))
-                .request(MediaType.APPLICATION_JSON)
-                .header("Authentication", userSession.getToken())
-                .delete();
-        if (response.getStatus() == 204) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
-            loadEvents();
-            loadMyEvents(); // Liste aktualisieren
-            return "dashboard?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Löschen des Events", null));
-            return null;
-        }
-    }
-
     // Getter und Setter
     public Event getEvent() {
         return event;

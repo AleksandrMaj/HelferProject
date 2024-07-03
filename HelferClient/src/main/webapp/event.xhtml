@@ -19,6 +19,7 @@
                     <h:panelGroup rendered="#{eventMB.isOwner()}">
                         <div class="button-container">
                             <h:form>
+                                <h:inputHidden value="#{eventMB.eventID}" />
                                 <h:commandButton value="Edit" action="#{eventMB.updateEvent}" styleClass="edit-button"/>
                                 <h:commandButton value="Delete" action="#{eventMB.deleteEvent}" styleClass="delete-button"/>
                             </h:form>

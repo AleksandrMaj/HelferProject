@@ -4,12 +4,12 @@ import entities.Event;
 import enums.Benutzergruppe;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.faces.annotation.View;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.Converter;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -18,13 +18,14 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.Serializable;
 import java.util.Map;
 
 
 @Named
-@RequestScoped
-public class eventMB {
-
+@ViewScoped
+public class eventMB implements Serializable
+{
     private Client client;
     private WebTarget target;
     private Event selectedEvent;
@@ -44,8 +45,17 @@ public class eventMB {
     public void init() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
-        eventID = Integer.parseInt(params.get("eventId"));
-        loadEvent();
+        String eventIdParam = params.get("eventId");
+        if (eventIdParam != null && !eventIdParam.isEmpty()) {
+            try {
+                eventID = Integer.parseInt(eventIdParam);
+                loadEvent();
+            } catch (NumberFormatException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid event ID", null));
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Event ID not provided", null));
+        }
     }
 
     public void loadEvent() {
@@ -70,7 +80,6 @@ public class eventMB {
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
-            loadEvent(); // Liste aktualisieren
             return "dashboard?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Aktualisieren des Events", null));
@@ -78,16 +87,16 @@ public class eventMB {
         }
     }
 
-    public String deleteEvent(int id) {
+    public String deleteEvent() {
         Response response = target
-                .path(String.valueOf(id))
+                .path(String.valueOf(eventID))
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
                 .delete();
+
         if (response.getStatus() == 204) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
-            loadEvent();
-            return "dashboard?faces-redirect=true";
+            return "dashboard.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Löschen des Events", null));
             return null;
@@ -133,5 +142,15 @@ public class eventMB {
     public void setSelectedEvent(Event selectedEvent)
     {
         this.selectedEvent = selectedEvent;
+    }
+
+    public int getEventID()
+    {
+        return eventID;
+    }
+
+    public void setEventID(int eventID)
+    {
+        this.eventID = eventID;
     }
 }
