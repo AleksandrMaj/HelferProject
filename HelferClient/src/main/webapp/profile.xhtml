@@ -19,30 +19,33 @@
         </div>
     </header>
     <h:form>
-        <div class="container">
-            <h1>Mein Profil</h1>
-            <div class="profile-grid">
-                <label>Vorname:</label>
-                <div class="value">#{userSession.loggedInUser.vorname}</div>
+        <div class="main-container">
+            <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
+            <div class="container">
+                <h1>Mein Profil</h1>
+                <div class="profile-grid">
+                    <label>Vorname:</label>
+                    <div class="value">#{userSession.loggedInUser.vorname}</div>
 
-                <label>Nachname:</label>
-                <div class="value">#{userSession.loggedInUser.name}</div>
+                    <label>Nachname:</label>
+                    <div class="value">#{userSession.loggedInUser.name}</div>
 
-                <label>E-Mail:</label>
-                <div class="value">#{userSession.loggedInUser.email}</div>
+                    <label>E-Mail:</label>
+                    <div class="value">#{userSession.loggedInUser.email}</div>
 
-                <label>Postleitzahl:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.plz}</div>
+                    <label>Postleitzahl:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.plz}</div>
 
-                <label>Stadt:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.stadt}</div>
+                    <label>Stadt:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.stadt}</div>
 
-                <label>Straße:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.strasse}</div>
+                    <label>Straße:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.strasse}</div>
 
-                <label>Hausnummer:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.hausnummer}</div>
-                <!-- Weitere Profilinformationen hier -->
+                    <label>Hausnummer:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.hausnummer}</div>
+                    <!-- Weitere Profilinformationen hier -->
+                </div>
             </div>
         </div>
     </h:form>
