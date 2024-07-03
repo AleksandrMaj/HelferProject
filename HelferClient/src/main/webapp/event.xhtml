@@ -9,6 +9,15 @@
 <h:body>
     <header>
         <h1>EventMaster</h1>
+        <div class="profile-menu">
+            <h:graphicImage value="#{dashboardMB.profileIconUrl}" alt="Profile Icon" styleClass="profile-icon"/>
+            <div class="dropdown-content">
+                <h:link value="Mein Profil" outcome="profile"/>
+                <h:form>
+                    <h:commandLink value="Abmelden" action="#{userSession.logout}"/>
+                </h:form>
+            </div>
+        </div>
     </header>
     <div class="main-container">
         <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
@@ -29,6 +38,10 @@
                 <div class="form-field">
                     <label>Event Date:</label>
                     <h:outputText value="#{dashboardMB.formatDateTime(eventMB.selectedEvent.date)}" />
+                </div>
+                <div class="form-field">
+                    <label>Organisator:</label>
+                    <h:outputText value="#{eventMB.selectedEvent.organisator.name} #{eventMB.selectedEvent.organisator.vorname}" />
                 </div>
             </div>
             <h:panelGroup rendered="#{eventMB.isOwner()}">

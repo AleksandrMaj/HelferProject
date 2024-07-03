@@ -6,15 +6,19 @@
     <h:outputStylesheet name="profil.css"/>
 </h:head>
 <h:body>
+    <header>
+        <h1>EventMaster</h1>
+        <div class="profile-menu">
+            <h:graphicImage value="#{dashboardMB.profileIconUrl}" alt="Profile Icon" styleClass="profile-icon"/>
+            <div class="dropdown-content">
+                <h:link value="Mein Profil" outcome="profile"/>
+                <h:form>
+                    <h:commandLink value="Abmelden" action="#{userSession.logout}"/>
+                </h:form>
+            </div>
+        </div>
+    </header>
     <h:form>
-        <header>
-            <h1>Profil</h1>
-            <nav>
-                <a href="dashboard.xhtml">Home</a>
-                <a href="#" onclick="document.getElementById('logoutForm:logout').click()">Abmelden</a>
-            </nav>
-        </header>
-
         <div class="container">
             <h1>Mein Profil</h1>
             <div class="profile-grid">

@@ -14,25 +14,16 @@ header {
     border-bottom: 1px solid gray;
 }
 
-h1 {
-    font-size: 17px;
-}
-
-nav a {
-    color: Black;
-    text-decoration: none;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-nav a:hover {
-    background-color: #555;
-}
-
 .profile-menu {
     position: relative;
     display: inline-block;
     font-size: 11px;
+}
+
+.profile-icon {
+    width: 40px;  /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    border-radius: 50%;
 }
 
 .dropdown-content {
@@ -40,7 +31,7 @@ nav a:hover {
     position: absolute;
     right: 0;
     background-color: #f9f9f9;
-    min-width: 90px;
+    width: 125px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 5px;
@@ -52,7 +43,7 @@ nav a:hover {
     padding: 10px;
     text-decoration: none;
     display: block;
-    font-size: 9px;
+    font-size: 14px;
 }
 
 .dropdown-content a:hover {

@@ -96,6 +96,14 @@ public class DashboardMB {
         return dateTime.format(formatter);
     }
 
+    public String getProfileIconUrl() {
+        if (userSession.getLoggedInUser() != null) {
+            String seed = userSession.getLoggedInUser().getVorname() + " " + userSession.getLoggedInUser().getName();
+            return "https://api.dicebear.com/9.x/initials/svg?seed=" + seed;
+        }
+        return "";
+    }
+
     // Getter und Setter
     public Event getEvent() {
         return event;
