@@ -10,24 +10,67 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px 30px 5px 10px;
+    padding: 5px 30px 5px 10px; /* Reduzierte Padding-Werte für kleineren Header */
     border-bottom: 1px solid gray;
 }
 
-h1 {
-    font-size: 17px;
+.profile-menu {
+    position: relative;
+    display: inline-block;
+    font-size: 11px;
 }
 
-nav a {
-    color: Black;
-    text-decoration: none;
-    padding: 5px;
+.profile-icon {
+    width: 40px;  /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    border-radius: 50%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    width: 125px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
     border-radius: 5px;
-    font-size: 12px;
+    flex-direction: column;
 }
 
-nav a:hover {
-    background-color: #555;
+.dropdown-content a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.profile-menu:hover .dropdown-content {
+    display: flex;
+}
+
+.back-link {
+    font-size: 14px;
+    text-decoration: none;
+    color: black;
+    margin: 20px 30px 0; /* Add margin for spacing */
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    max-width: 800px;
 }
 
 .container {
@@ -49,7 +92,6 @@ nav a:hover {
 }
 
 .profile-grid {
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 20px 20px;

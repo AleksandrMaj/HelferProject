@@ -6,39 +6,46 @@
     <h:outputStylesheet name="profil.css"/>
 </h:head>
 <h:body>
+    <header>
+        <h1>EventMaster</h1>
+        <div class="profile-menu">
+            <h:graphicImage value="#{dashboardMB.profileIconUrl}" alt="Profile Icon" styleClass="profile-icon"/>
+            <div class="dropdown-content">
+                <h:link value="Mein Profil" outcome="profile"/>
+                <h:form>
+                    <h:commandLink value="Abmelden" action="#{userSession.logout}"/>
+                </h:form>
+            </div>
+        </div>
+    </header>
     <h:form>
-        <header>
-            <h1>Profil</h1>
-            <nav>
-                <a href="dashboard.xhtml">Home</a>
-                <a href="#" onclick="document.getElementById('logoutForm:logout').click()">Abmelden</a>
-            </nav>
-        </header>
+        <div class="main-container">
+            <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
+            <div class="container">
+                <h1>Mein Profil</h1>
+                <div class="profile-grid">
+                    <label>Vorname:</label>
+                    <div class="value">#{userSession.loggedInUser.vorname}</div>
 
-        <div class="container">
-            <h1>Mein Profil</h1>
-            <div class="profile-grid">
-                <label>Vorname:</label>
-                <div class="value">#{userSession.loggedInUser.vorname}</div>
+                    <label>Nachname:</label>
+                    <div class="value">#{userSession.loggedInUser.name}</div>
 
-                <label>Nachname:</label>
-                <div class="value">#{userSession.loggedInUser.name}</div>
+                    <label>E-Mail:</label>
+                    <div class="value">#{userSession.loggedInUser.email}</div>
 
-                <label>E-Mail:</label>
-                <div class="value">#{userSession.loggedInUser.email}</div>
+                    <label>Postleitzahl:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.plz}</div>
 
-                <label>Postleitzahl:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.plz}</div>
+                    <label>Stadt:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.stadt}</div>
 
-                <label>Stadt:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.stadt}</div>
+                    <label>Straße:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.strasse}</div>
 
-                <label>Straße:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.strasse}</div>
-
-                <label>Hausnummer:</label>
-                <div class="value">#{userSession.loggedInUser.adresse.hausnummer}</div>
-                <!-- Weitere Profilinformationen hier -->
+                    <label>Hausnummer:</label>
+                    <div class="value">#{userSession.loggedInUser.adresse.hausnummer}</div>
+                    <!-- Weitere Profilinformationen hier -->
+                </div>
             </div>
         </div>
     </h:form>

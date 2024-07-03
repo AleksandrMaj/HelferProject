@@ -15,6 +15,8 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,8 @@ public class DashboardMB {
 
     @Inject
     UserSession userSession;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy | HH:mm");
 
     public DashboardMB() {
         client = ClientBuilder.newClient();
@@ -72,7 +76,7 @@ public class DashboardMB {
                 .header("Authentication", userSession.getToken())
                 .post(Entity.json(event));
 
-        if (response.getStatus() == 200) {
+        if (response.getStatus() == 201) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich erstellt"));
             loadEvents(); // Liste aktualisieren
             loadMyEvents(); // Persönliche Events aktualisieren
@@ -84,38 +88,20 @@ public class DashboardMB {
         }
     }
 
-    public String updateEvent() {
-        Response response = target
-                .request(MediaType.APPLICATION_JSON)
-                .header("Authentication", userSession.getToken())
-                .put(Entity.json(event));
-
-        if (response.getStatus() == 200) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
-            loadEvents(); // Liste aktualisieren
-            loadMyEvents(); // Persönliche Events aktualisieren
-            return "dashboard?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Aktualisieren des Events", null));
-            return null;
-        }
+    public boolean hasEvents() {
+        return myEvents != null && !myEvents.isEmpty();
     }
 
-    public String deleteEvent(int id) {
-        Response response = target
-                .path(String.valueOf(id))
-                .request(MediaType.APPLICATION_JSON)
-                .header("Authentication", userSession.getToken())
-                .delete();
-        if (response.getStatus() == 204) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
-            loadEvents();
-            loadMyEvents(); // Liste aktualisieren
-            return "dashboard?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Löschen des Events", null));
-            return null;
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(formatter);
+    }
+
+    public String getProfileIconUrl() {
+        if (userSession.getLoggedInUser() != null) {
+            String seed = userSession.getLoggedInUser().getVorname() + " " + userSession.getLoggedInUser().getName();
+            return "https://api.dicebear.com/9.x/initials/svg?seed=" + seed;
         }
+        return "";
     }
 
     // Getter und Setter

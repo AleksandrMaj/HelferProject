@@ -4,6 +4,7 @@ import core.entities.Benutzer;
 import core.entities.Event;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,7 @@ public record EventTO(
         String name,
 
         @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-        Date date,
+        LocalDateTime date,
         List<Benutzer> helferListe,
         Benutzer organisator
 )

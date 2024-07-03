@@ -31,6 +31,9 @@ public class UserSession implements Serializable {
     public boolean isOrganisator() {
         return loggedInUser != null && loggedInUser.getBenutzergruppe() == Benutzergruppe.ORGANISATOR;
     }
+
+    // Getters and setters
+
     public String logout()
     {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();

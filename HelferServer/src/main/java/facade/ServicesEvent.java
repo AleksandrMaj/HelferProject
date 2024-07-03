@@ -21,8 +21,9 @@ public class ServicesEvent
 {
     @EJB
     private IEventsVerwalten eventsVerwalten;
+
     @EJB
-    IHelferVerwalten helferVerwalten;
+    private IHelferVerwalten helferVerwalten;
 
     @Inject
     private Authentication authentication;
@@ -183,9 +184,9 @@ public class ServicesEvent
         if (event.getHelferListe().stream().anyMatch(helfer -> helfer.getId() == user.getId()))
         {
             helferVerwalten.removeHelfer(id, user);
-            return Response.ok().build();
+            return Response.ok(event).build();
         }
         helferVerwalten.addHelfer(id, user);
-        return Response.ok().build();
-    }
+        return Response.ok(event).build();
+    } //TODO: Anonynmize helferListe
 }

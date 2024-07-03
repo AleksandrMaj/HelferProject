@@ -10,45 +10,93 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 30px;
+    padding: 5px 30px 5px 10px; /* Reduzierte Padding-Werte für kleineren Header */
     border-bottom: 1px solid gray;
 }
 
-h1 {
-    font-size: 24px;
-    margin: 0;
+.profile-menu {
+    position: relative;
+    display: inline-block;
+    font-size: 11px;
+}
+
+.profile-icon {
+    width: 40px;  /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    border-radius: 50%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    width: 125px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    flex-direction: column;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.profile-menu:hover .dropdown-content {
+    display: flex;
 }
 
 .back-link {
     font-size: 14px;
     text-decoration: none;
     color: black;
+    margin: 20px 30px 0; /* Add margin for spacing */
 }
 
 .back-link:hover {
     text-decoration: underline;
 }
 
-.container {
+.main-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px;
-    width: 90%;
+    flex-direction: column;
+    width: 80%;
     margin: 0 auto;
 }
 
- .helpers {
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+.event-details {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     flex: 1;
 }
 
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .form-field {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduced margin for tighter spacing */
 }
 
 .form-field label {
@@ -57,26 +105,21 @@ h1 {
     font-weight: bold;
 }
 
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
 .button-container {
     display: flex;
-    justify-content: flex-end;
-    margin: 20px;
 }
 
-.edit-button, .delete-button {
+.button-container form {
+    display: flex;
+    gap: 16px;
+}
+
+.edit-button, .delete-button, .helper-button {
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
     cursor: pointer;
     font-size: 14px;
-    margin-left: 10px;
 }
 
 .edit-button {
@@ -95,4 +138,106 @@ h1 {
 
 .delete-button:hover {
     background-color: #cc5038;
+}
+
+.helper-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.helper-button:hover {
+    background-color: #218838;
+}
+
+.helpers-list {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+    flex: 1;
+}
+
+.helpers-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.helpers-list li {
+    margin-bottom: 10px;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px; /* Abrundung der Ecken */
+    width: 40%; /* Breite des Modals */
+    max-width: 500px;
+}
+
+.modal-content .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content .close:hover,
+.modal-content.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.modal-content .form-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-content .form-field label {
+    width: 30%;
+    margin-right: 10px;
+}
+
+.modal-content .form-field input {
+    width: 65%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.modal-content .create-button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-content .create-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.modal-content .create-button:hover {
+    background-color: darkseagreen;
 }

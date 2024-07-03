@@ -1,14 +1,15 @@
 package client;
 
 import entities.Event;
+import enums.Benutzergruppe;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.faces.annotation.View;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.Converter;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -17,34 +18,49 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 
 @Named
-@RequestScoped
-public class eventMB {
-
+@ViewScoped
+public class eventMB implements Serializable
+{
     private Client client;
     private WebTarget target;
-    private Event event;
+    private Event selectedEvent;
 
     private int eventID;
 
     @Inject
     UserSession userSession;
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy | HH:mm");
+
     public eventMB() {
         client = ClientBuilder.newClient();
         target = client.target(Environment.BASE + "/event");
-        event = new Event();
+        selectedEvent = new Event();
     }
 
     @PostConstruct
     public void init() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
-        eventID = Integer.parseInt(params.get("eventId"));
-        loadEvent();
+        String eventIdParam = params.get("eventId");
+        if (eventIdParam != null && !eventIdParam.isEmpty()) {
+            try {
+                eventID = Integer.parseInt(eventIdParam);
+                loadEvent();
+            } catch (NumberFormatException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid event ID", null));
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Event ID not provided", null));
+        }
     }
 
     public void loadEvent() {
@@ -55,7 +71,7 @@ public class eventMB {
                 .get();
 
         if (response.getStatus() == 200) {
-            event = response.readEntity(new GenericType<Event>() {});
+            selectedEvent = response.readEntity(new GenericType<Event>() {});
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Laden der Events", null));
         }
@@ -65,11 +81,10 @@ public class eventMB {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
-                .put(Entity.json(event));
+                .put(Entity.json(selectedEvent));
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
-            loadEvent(); // Liste aktualisieren
             return "dashboard?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Aktualisieren des Events", null));
@@ -77,43 +92,87 @@ public class eventMB {
         }
     }
 
-    public String deleteEvent(int id) {
+    public String deleteEvent() {
         Response response = target
-                .path(String.valueOf(id))
+                .path(String.valueOf(eventID))
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
                 .delete();
+
         if (response.getStatus() == 204) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich gelöscht"));
-            loadEvent();
-            return "dashboard?faces-redirect=true";
+            return "dashboard.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Löschen des Events", null));
             return null;
         }
     }
-    public void toggleHelfer(int eventId) {
+
+    public boolean isOwner() {
+        return selectedEvent.getOrganisator().getId() == userSession.getLoggedInUser().getId();
+    }
+
+    public boolean isMitglied() {
+        return userSession.getLoggedInUser().getBenutzergruppe() == Benutzergruppe.MITGLIED;
+    }
+
+    public boolean isHelfer() {
+        return selectedEvent.getHelferListe().stream().anyMatch(helper -> helper.getId() == userSession.getLoggedInUser().getId());
+    }
+
+    public String getHelferButtonText() {
+        return isHelfer() ? "Remove as Helper" : "Become a Helper";
+    }
+
+    public String toggleHelfer() {
         Response response = target
-                .path(String.valueOf(eventId) + "/helfer")
+                .path(eventID + "/helfer")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
                 .post(null);
 
         if (response.getStatus() == 200) {
+            Event helpingEvent = response.readEntity(new GenericType<Event>() {});
+
+            List<Event> helferListe = userSession.getLoggedInUser().getEvents();
+            boolean isInList = helferListe.stream().anyMatch(event -> event.getId() == helpingEvent.getId());
+
+            if (isInList) {
+                helferListe.removeIf(event -> event.getId() == helpingEvent.getId());
+            } else {
+                helferListe.add(helpingEvent);
+            }
+            userSession.getLoggedInUser().setEvents(helferListe);
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Helferstatus erfolgreich geändert"));
-            loadEvent(); // Liste aktualisieren
+            return "dashboard.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Ändern des Helferstatus", null));
+            return null;
         }
     }
 
-    // Getter und Setter
-    public Event getEvent() {
-        return event;
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(formatter);
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public Event getSelectedEvent()
+    {
+        return selectedEvent;
     }
 
+    public void setSelectedEvent(Event selectedEvent)
+    {
+        this.selectedEvent = selectedEvent;
+    }
+
+    public int getEventID()
+    {
+        return eventID;
+    }
+
+    public void setEventID(int eventID)
+    {
+        this.eventID = eventID;
+    }
 }
