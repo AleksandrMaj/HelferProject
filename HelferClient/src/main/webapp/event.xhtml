@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
-    <title>Event Details</title>
+    <title>Event Detail</title>
     <h:outputStylesheet name="event.css"/>
 </h:head>
 <h:body>
-    <h:form id="eventForm">
-        <header>
-            <h1>Eventname: #{eventMB.event.name}</h1>
-            <h:commandLink value="← zurück zur Liste" action="dashboard.xhtml" class="back-link"/>
-        </header>
-
+    <header>
+        <h1>EventMaster</h1>
+    </header>
+    <div class="main-container">
+        <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
         <div class="container">
             <div class="event-details">
-                <div class="form-field">
-                    <h:outputLabel for="date" value="Termin:"/>
-                    <h:inputText id="date" value="#{eventMB.event.date}" styleClass="form-control">
-                        <f:convertDateTime pattern="yyyy-MM-dd"/>
-                    </h:inputText>
+                <div class="event-header">
+                    <h1><h:outputText value="#{eventMB.selectedEvent.name}" /></h1>
+                    <h:panelGroup rendered="#{eventMB.isOwner()}">
+                        <div class="button-container">
+                            <h:form>
+                                <h:commandButton value="Edit" action="#{eventMB.updateEvent}" styleClass="edit-button"/>
+                                <h:commandButton value="Delete" action="#{eventMB.deleteEvent}" styleClass="delete-button"/>
+                            </h:form>
+                        </div>
+                    </h:panelGroup>
                 </div>
                 <div class="form-field">
-                    <h:outputLabel for="organisator" value="Organisator:"/>
-                    <h:inputText id="organisator" value="#{eventMB.event.organisator.name}" styleClass="form-control"
-                                 disabled="true"/>
+                    <label>Event Date:</label>
+                    <h:outputText value="#{eventMB.selectedEvent.date}" />
                 </div>
             </div>
-            <h:panelGroup rendered="#{userSession.isOrganisator()}">
-                <div class="helpers">
-                    <h3>Helfer</h3>
+            <h:panelGroup rendered="#{eventMB.isOwner()}">
+                <div class="helpers-list">
+                    <h2>Helpers</h2>
                     <ul>
-                        <ui:repeat value="#{eventMB.event.helferListe}" var="helper">
-                            <li>#{helper.name}</li>
+                        <ui:repeat value="#{eventMB.selectedEvent.helferListe}" var="helper">
+                            <li><h:outputText value="#{helper.name}, #{helper.vorname}" /></li>
                         </ui:repeat>
                     </ul>
-                    <h:panelGroup>
-                        #{event.helferListe.size()}
-                    </h:panelGroup>
                 </div>
             </h:panelGroup>
         </div>
-
-        <div class="button-container">
-            <h:commandButton value="Ändern" action="#{eventMB.updateEvent}" class="edit-button"/>
-            <h:commandButton value="Löschen" action="#{eventMB.deleteEvent(eventMB.event.id)}" class="delete-button"/>
-        </div>
-    </h:form>
-    <h:messages/>
+        <h:panelGroup rendered="#{eventMB.isMitglied()}">
+            <div class="button-container" style="margin-left: 20px">
+                <h:form>
+                    <h:commandButton value="#{eventMB.helferButtonText}" action="#{eventMB.toggleHelfer}" styleClass="helper-button"/>
+                </h:form>
+            </div>
+        </h:panelGroup>
+    </div>
 </h:body>
 </html>

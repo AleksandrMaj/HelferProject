@@ -1,3 +1,4 @@
+/* event.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -15,7 +16,7 @@ header {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 32px; /* Increased font size for event name */
     margin: 0;
 }
 
@@ -23,32 +24,45 @@ h1 {
     font-size: 14px;
     text-decoration: none;
     color: black;
+    margin: 20px 30px 0; /* Add margin for spacing */
 }
 
 .back-link:hover {
     text-decoration: underline;
 }
 
-.container {
+.main-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px;
-    width: 90%;
+    flex-direction: column;
+    width: 80%;
     margin: 0 auto;
 }
 
- .helpers {
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+.event-details {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin: 10px;
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 0.7;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .form-field {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduced margin for tighter spacing */
 }
 
 .form-field label {
@@ -57,26 +71,21 @@ h1 {
     font-weight: bold;
 }
 
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
 .button-container {
     display: flex;
-    justify-content: flex-end;
-    margin: 20px;
 }
 
-.edit-button, .delete-button {
+.button-container form {
+    display: flex;
+    gap: 16px;
+}
+
+.edit-button, .delete-button, .helper-button {
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
     cursor: pointer;
     font-size: 14px;
-    margin-left: 10px;
 }
 
 .edit-button {
@@ -95,4 +104,31 @@ h1 {
 
 .delete-button:hover {
     background-color: #cc5038;
+}
+
+.helper-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.helper-button:hover {
+    background-color: #218838;
+}
+
+.helpers-list {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+    flex: 0.3;
+}
+
+.helpers-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.helpers-list li {
+    margin-bottom: 10px;
 }

@@ -21,8 +21,9 @@ public class ServicesEvent
 {
     @EJB
     private IEventsVerwalten eventsVerwalten;
+
     @EJB
-    IHelferVerwalten helferVerwalten;
+    private IHelferVerwalten helferVerwalten;
 
     @Inject
     private Authentication authentication;

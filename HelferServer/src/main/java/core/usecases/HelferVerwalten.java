@@ -2,7 +2,9 @@ package core.usecases;
 
 import core.entities.Benutzer;
 import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
+@Stateless
 public class HelferVerwalten implements IHelferVerwalten
 {
     @EJB

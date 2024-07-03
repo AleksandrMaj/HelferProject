@@ -1,6 +1,7 @@
 package client;
 
 import entities.Event;
+import enums.Benutzergruppe;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.annotation.ManagedProperty;
@@ -26,7 +27,7 @@ public class eventMB {
 
     private Client client;
     private WebTarget target;
-    private Event event;
+    private Event selectedEvent;
 
     private int eventID;
 
@@ -36,7 +37,7 @@ public class eventMB {
     public eventMB() {
         client = ClientBuilder.newClient();
         target = client.target(Environment.BASE + "/event");
-        event = new Event();
+        selectedEvent = new Event();
     }
 
     @PostConstruct
@@ -55,7 +56,7 @@ public class eventMB {
                 .get();
 
         if (response.getStatus() == 200) {
-            event = response.readEntity(new GenericType<Event>() {});
+            selectedEvent = response.readEntity(new GenericType<Event>() {});
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Laden der Events", null));
         }
@@ -65,7 +66,7 @@ public class eventMB {
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
-                .put(Entity.json(event));
+                .put(Entity.json(selectedEvent));
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Event erfolgreich aktualisiert"));
@@ -92,9 +93,26 @@ public class eventMB {
             return null;
         }
     }
-    public void toggleHelfer(int eventId) {
+
+    public boolean isOwner() {
+        return selectedEvent.getOrganisator().getId() == userSession.getLoggedInUser().getId();
+    }
+
+    public boolean isMitglied() {
+        return userSession.getLoggedInUser().getBenutzergruppe() == Benutzergruppe.MITGLIED;
+    }
+
+    public boolean isHelfer() {
+        return selectedEvent.getHelferListe().stream().anyMatch(helper -> helper.getId() == userSession.getLoggedInUser().getId());
+    }
+
+    public String getHelferButtonText() {
+        return isHelfer() ? "Remove as Helper" : "Become a Helper";
+    }
+
+    public void toggleHelfer() {
         Response response = target
-                .path(String.valueOf(eventId) + "/helfer")
+                .path(String.valueOf(eventID) + "/helfer")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
                 .post(null);
@@ -107,13 +125,13 @@ public class eventMB {
         }
     }
 
-    // Getter und Setter
-    public Event getEvent() {
-        return event;
+    public Event getSelectedEvent()
+    {
+        return selectedEvent;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setSelectedEvent(Event selectedEvent)
+    {
+        this.selectedEvent = selectedEvent;
     }
-
 }
