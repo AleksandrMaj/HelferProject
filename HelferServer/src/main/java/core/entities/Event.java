@@ -9,8 +9,8 @@ public class Event
     private int id;
     private String name;
     private Date date;
-    private List<Benutzer> helferListe = new LinkedList<>();
     private Benutzer organisator;
+    private List<Benutzer> helferListe = new LinkedList<>();
 
     public Event() {
     }

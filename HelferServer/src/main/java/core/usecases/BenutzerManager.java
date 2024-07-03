@@ -17,8 +17,8 @@ public class BenutzerManager
         return benutzerDAO.findByCredentials(username, password);
     }
 
-    public Benutzer addBenutzer(Benutzer newBenutzer) {
-        return benutzerDAO.save(newBenutzer);
+    public Benutzer addBenutzer(Benutzer benutzer) {
+        return benutzerDAO.save(benutzer);
     }
 
     public boolean emailExists(String email) {

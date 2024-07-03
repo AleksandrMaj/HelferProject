@@ -1,6 +1,8 @@
 package core.usecases;
 
+import core.entities.Benutzer;
+
 public interface IHelferVerwalten {
-    void addHelfer(int eventID, int benutzerID);
-    void deleteHelfer(int eventID, int benutzerID);
+    boolean addHelfer(int eventID, Benutzer user);
+    boolean removeHelfer(int eventID, Benutzer user);
 }

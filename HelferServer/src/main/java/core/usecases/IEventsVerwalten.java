@@ -8,7 +8,7 @@ import java.util.List;
 public interface IEventsVerwalten
 {
 
-    Event eventsAnlegen(Event event);
+    Event eventAnlegen(Event event);
 
     Event eventBearbeiten(Event event);
 
@@ -17,8 +17,4 @@ public interface IEventsVerwalten
     List<Event> getAllEvents();
 
     Event getEventById(int id);
-
-    boolean addHelfer(int eventID, Benutzer user);
-
-    boolean removeHelfer(int eventID, Benutzer user);
 }
