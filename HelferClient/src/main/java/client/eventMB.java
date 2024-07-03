@@ -119,18 +119,19 @@ public class eventMB implements Serializable
         return isHelfer() ? "Remove as Helper" : "Become a Helper";
     }
 
-    public void toggleHelfer() {
+    public String toggleHelfer() {
         Response response = target
-                .path(String.valueOf(eventID) + "/helfer")
+                .path(eventID + "/helfer")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
                 .post(null);
 
         if (response.getStatus() == 200) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Helferstatus erfolgreich geändert"));
-            loadEvent(); // Liste aktualisieren
+            return "dashboard.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Ändern des Helferstatus", null));
+            return null;
         }
     }
 
