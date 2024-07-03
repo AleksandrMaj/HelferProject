@@ -6,6 +6,15 @@
 <h:head>
     <title>EventMaster</title>
     <h:outputStylesheet name="dashboard.css"/>
+    <script>
+        function showModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    </script>
 </h:head>
 <h:body>
     <h:form id="mainForm">
@@ -22,13 +31,12 @@
 
         <div class="container">
             <div class="main-content">
-                <h2>Eventliste</h2>
-                <!-- Button für Event hinzufügen mit Popup -->
-                <h:panelGroup rendered="#{userSession.isOrganisator()}">
-                    <div class="button-container">
-                        <button type="button" onclick="showModal()">Event hinzufügen</button>
-                    </div>
-                </h:panelGroup>
+                <div class="event-list-title">
+                    <h2>Eventliste</h2>
+                    <h:panelGroup rendered="#{userSession.isOrganisator()}">
+                        <button type="button" class="create-button open-create-event" onclick="showModal()">Event hinzufügen</button>
+                    </h:panelGroup>
+                </div>
 
                 <!-- Popup -->
                 <div id="myModal" class="modal">

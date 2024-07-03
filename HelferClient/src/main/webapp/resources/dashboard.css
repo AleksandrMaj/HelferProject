@@ -74,6 +74,18 @@ header {
     width: 65%; /* Main content width */
 }
 
+.event-list-title {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.open-create-event {
+    position: absolute;
+    right: 0;
+}
+
 .sidebar {
     width: 30%; /* Sidebar width */
     text-align: center; /* Center align the text in the sidebar */
