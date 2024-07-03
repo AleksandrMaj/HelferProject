@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 
@@ -127,6 +128,18 @@ public class eventMB implements Serializable
                 .post(null);
 
         if (response.getStatus() == 200) {
+            Event helpingEvent = response.readEntity(new GenericType<Event>() {});
+
+            List<Event> helferListe = userSession.getLoggedInUser().getEvents();
+            boolean isInList = helferListe.stream().anyMatch(event -> event.getId() == helpingEvent.getId());
+
+            if (isInList) {
+                helferListe.removeIf(event -> event.getId() == helpingEvent.getId());
+            } else {
+                helferListe.add(helpingEvent);
+            }
+            userSession.getLoggedInUser().setEvents(helferListe);
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Helferstatus erfolgreich geändert"));
             return "dashboard.xhtml?faces-redirect=true";
         } else {

@@ -184,9 +184,9 @@ public class ServicesEvent
         if (event.getHelferListe().stream().anyMatch(helfer -> helfer.getId() == user.getId()))
         {
             helferVerwalten.removeHelfer(id, user);
-            return Response.ok().build();
+            return Response.ok(event).build();
         }
         helferVerwalten.addHelfer(id, user);
-        return Response.ok().build();
+        return Response.ok(event).build();
     }
 }
