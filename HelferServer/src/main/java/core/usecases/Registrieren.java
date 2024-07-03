@@ -22,8 +22,6 @@ public class Registrieren implements IRegistrieren
             throw new IllegalArgumentException("E-Mail bereits registriert");
         }
 
-        user.setBenutzergruppe(Benutzergruppe.MITGLIED);
-        user.setEvents(new LinkedList<>());
         return benutzerManager.addBenutzer(user);
     }
 }

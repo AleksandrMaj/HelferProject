@@ -36,7 +36,8 @@ body {
     color: #333;
 }
 
-.registration-container input {
+.registration-container input,
+.registration-container select {
     width: calc(100% - 20px);
     padding: 10px;
     margin: 5px 0 15px;

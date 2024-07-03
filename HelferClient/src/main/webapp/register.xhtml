@@ -44,16 +44,21 @@
                     <label for="plz">Postal Code:</label>
                     <h:inputText id="plz" value="#{registrierenMB.adresse.plz}"/>
                 </div>
+                <div class="full-width">
+                    <label for="benutzergruppe">User Group:</label>
+                    <h:selectOneMenu id="benutzergruppe" value="#{registrierenMB.benutzergruppe}">
+                        <f:selectItems value="#{registrierenMB.benutzergruppen}" var="gruppe" itemValue="#{gruppe}"
+                                       itemLabel="#{gruppe}"/>
+                    </h:selectOneMenu>
+                </div>
             </div>
             <div class="full-width">
-                <h:commandButton value="Account anlegen" action="#{registrierenMB.register}"
-                                 styleClass="register-button"/>
+                <h:commandButton value="Register" action="#{registrierenMB.register}" class="register-button"/>
             </div>
             <div class="full-width">
                 <h:commandButton value="Zurück zum Login" action="login.xhtml?faces-redirect=true"
                                  styleClass="back-button"/>
             </div>
-            <h:messages globalOnly="true" styleClass="error-message"/>
         </div>
     </h:form>
 </h:body>
