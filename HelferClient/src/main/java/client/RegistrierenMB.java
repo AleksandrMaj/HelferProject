@@ -2,6 +2,8 @@ package client;
 
 import entities.Adresse;
 import entities.Benutzer;
+import enums.Benutzergruppe;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -13,6 +15,9 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Named
 @RequestScoped
 public class RegistrierenMB
@@ -22,6 +27,14 @@ public class RegistrierenMB
     private String email;
     private String password;
     private final Adresse adresse = new Adresse();
+    private Benutzergruppe benutzergruppe;
+    private List<Benutzergruppe> benutzergruppen;
+
+    @PostConstruct
+    public void init() {
+        // Initialize benutzergruppen with enum values
+        benutzergruppen = Arrays.asList(Benutzergruppe.values());
+    }
 
     // Getters and setters
     public String getVorname()
@@ -69,6 +82,18 @@ public class RegistrierenMB
         return adresse;
     }
 
+    public List<Benutzergruppe> getBenutzergruppen() {
+        return benutzergruppen;
+    }
+
+    public Benutzergruppe getBenutzergruppe() {
+        return benutzergruppe;
+    }
+
+    public void setBenutzergruppe(Benutzergruppe benutzergruppe) {
+        this.benutzergruppe = benutzergruppe;
+    }
+
     // Register method
     public String register() {
         Client client = ClientBuilder.newClient();
@@ -81,6 +106,7 @@ public class RegistrierenMB
         newUser.setEmail(email);
         newUser.setPasswort(password);
         newUser.setAdresse(adresse);
+        newUser.setBenutzergruppe(benutzergruppe);
 
         Response response = request
                 .request(MediaType.APPLICATION_JSON)
