@@ -1,5 +1,6 @@
 package entities;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -7,14 +8,14 @@ public class Event
 {
     private int id;
     private String name;
-    private Date date;
+    private LocalDateTime date;
     private List<Benutzer> helferListe;
     private Benutzer organisator;
 
     public Event() {
     }
 
-    public Event(String name, Date date, Benutzer organisator) {
+    public Event(String name, LocalDateTime date, Benutzer organisator) {
         this.name = name;
         this.date = date;
         this.organisator = organisator;
@@ -37,11 +38,11 @@ public class Event
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

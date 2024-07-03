@@ -15,6 +15,8 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,8 @@ public class DashboardMB {
 
     @Inject
     UserSession userSession;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy | HH:mm");
 
     public DashboardMB() {
         client = ClientBuilder.newClient();
@@ -86,6 +90,10 @@ public class DashboardMB {
 
     public boolean hasEvents() {
         return myEvents != null && !myEvents.isEmpty();
+    }
+
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(formatter);
     }
 
     // Getter und Setter

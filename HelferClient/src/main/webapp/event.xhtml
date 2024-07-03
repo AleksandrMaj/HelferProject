@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-field">
                     <label>Event Date:</label>
-                    <h:outputText value="#{eventMB.selectedEvent.date}" />
+                    <h:outputText value="#{dashboardMB.formatDateTime(eventMB.selectedEvent.date)}" />
                 </div>
             </div>
             <h:panelGroup rendered="#{eventMB.isOwner()}">

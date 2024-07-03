@@ -5,7 +5,7 @@
 
 <h:head>
     <title>EventMaster</title>
-    <h:outputStylesheet name="dashboard.css" />
+    <h:outputStylesheet name="dashboard.css"/>
     <script>
         function showModal() {
             document.getElementById('myModal').style.display = 'block';
@@ -42,6 +42,7 @@
                         <button type="button" onclick="showModal()">Event hinzufügen</button>
                     </div>
                 </h:panelGroup>
+
                 <!-- Popup -->
                 <div id="myModal" class="modal">
                     <div class="modal-content">
@@ -52,13 +53,13 @@
                             <h:inputText id="vorname" value="#{dashboardMB.event.name}" styleClass="form-control"/>
                         </div>
                         <div class="form-field">
-                            <h:outputLabel for="date" value="Termin:"/>
-                            <h:inputText id="date" value="#{dashboardMB.event.date}" styleClass="form-control">
-                                <f:convertDateTime pattern="yyyy-MM-dd"/>
-                            </h:inputText>
+                            <h:outputLabel for="datetime" value="Termin:"/>
+                            <h:inputText id="datetime" value="#{dashboardMB.event.date}" type="datetime-local"
+                                         styleClass="form-control"/>
                         </div>
                         <div class="create-button-container">
-                            <h:commandButton value="Create Event" action="#{dashboardMB.createEvent}" styleClass="create-button"/>
+                            <h:commandButton value="Create Event" action="#{dashboardMB.createEvent}"
+                                             styleClass="create-button"/>
                         </div>
                     </div>
                 </div>
@@ -77,13 +78,11 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Termin</f:facet>
-                        <h:outputText value="#{event.date}">
-                            <f:convertDateTime pattern="dd.MM.yyyy"/>
-                        </h:outputText>
+                        #{dashboardMB.formatDateTime(event.date)}
                     </h:column>
                     <h:column>
                         <f:facet name="header">Organisator</f:facet>
-                        #{event.organisator.name}
+                        #{event.organisator.vorname} #{event.organisator.name}
                     </h:column>
                     <h:column>
                         <f:facet name="header">Helfer</f:facet>
@@ -104,12 +103,10 @@
                 </h:panelGroup>
 
                 <h:form>
-                    <!-- Message displayed when there are no events -->
                     <h:panelGroup rendered="#{!dashboardMB.hasEvents()}">
                         <p class="no-events-message">Noch keine Events</p>
                     </h:panelGroup>
 
-                    <!-- Event table displayed when there are events -->
                     <h:panelGroup rendered="#{dashboardMB.hasEvents()}">
                         <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">
                             <h:column>
@@ -119,13 +116,6 @@
                         </h:dataTable>
                     </h:panelGroup>
                 </h:form>
-
-<!--                <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">-->
-<!--                    <h:column>-->
-<!--                        <f:facet name="header">Eventname</f:facet>-->
-<!--                        #{myEvent.name}-->
-<!--                    </h:column>-->
-<!--                </h:dataTable>-->
             </div>
         </div>
     </h:form>

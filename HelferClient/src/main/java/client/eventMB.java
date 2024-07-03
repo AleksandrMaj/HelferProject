@@ -19,6 +19,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class eventMB implements Serializable
 
     @Inject
     UserSession userSession;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy | HH:mm");
 
     public eventMB() {
         client = ClientBuilder.newClient();
@@ -146,6 +150,10 @@ public class eventMB implements Serializable
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Ändern des Helferstatus", null));
             return null;
         }
+    }
+
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(formatter);
     }
 
     public Event getSelectedEvent()

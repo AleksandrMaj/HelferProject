@@ -23,9 +23,9 @@ CREATE TABLE Benutzer
 -- Create Event table
 CREATE TABLE Event
 (
-    ID       INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     name          VARCHAR(255) NOT NULL,
-    date          DATE         NOT NULL,
+    date          TIMESTAMP    NOT NULL,
     organisatorID INT,
     FOREIGN KEY (organisatorID) REFERENCES Benutzer (id)
 );
@@ -46,22 +46,26 @@ CREATE INDEX idx_eventID ON Helfer (eventID);
 
 -- Insert example data
 INSERT INTO Benutzer (name, vorname, strasse, hausnummer, stadt, plz, benutzergruppe, email, passwort)
-VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ORGANISATOR', 'max.mustermann@example.com', 'password123'),
+VALUES ('Mustermann', 'Max', 'Musterstraße', '1', 'Musterstadt', '12345', 'ORGANISATOR', 'max.mustermann@example.com',
+        'password123'),
        ('Doe', 'John', 'Main St', '123', 'Sample City', '67890', 'MITGLIED', 'john.doe@example.com', 'password456'),
-       ('Smith', 'Jane', 'Second St', '456', 'Example Town', '10101', 'MITGLIED', 'jane.smith@example.com', 'password789'),
-       ('Brown', 'Charlie', 'Third Ave', '789', 'Testville', '20202', 'ORGANISATOR', 'charlie.brown@example.com', 'password321');
+       ('Smith', 'Jane', 'Second St', '456', 'Example Town', '10101', 'MITGLIED', 'jane.smith@example.com',
+        'password789'),
+       ('Brown', 'Charlie', 'Third Ave', '789', 'Testville', '20202', 'ORGANISATOR', 'charlie.brown@example.com',
+        'password321');
 
 -- Insert a sample Event
 INSERT INTO Event (name, date, organisatorID)
-VALUES ('Sample Event 1', '2024-06-26', 1),
-       ('Sample Event 2', '2024-07-15', 2),
-       ('Sample Event 3', '2024-08-05', 4);
+VALUES ('Sample Event 1', '2024-06-26 10:00:00', 1),
+       ('Sample Event 2', '2024-07-15 14:00:00', 4),
+       ('Sample Event 3', '2024-08-05 09:30:00', 4);
 
 -- Insert a sample Event
-INSERT INTO Helfer (eventID, benutzerID)
+/*INSERT INTO Helfer (eventID, benutzerID)
 VALUES (1, 2),
        (1, 3),
        (2, 1),
        (2, 4),
        (3, 2),
        (3, 3);
+*/

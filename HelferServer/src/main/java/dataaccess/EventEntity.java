@@ -4,6 +4,7 @@ import core.entities.Benutzer;
 import core.entities.Event;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class EventEntity
 
     private String name;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime date;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -35,7 +36,7 @@ public class EventEntity
     {
     }
 
-    public EventEntity(String name, Date date, BenutzerEntity organisator)
+    public EventEntity(String name, LocalDateTime date, BenutzerEntity organisator)
     {
         this.name = name;
         this.date = date;
@@ -75,12 +76,12 @@ public class EventEntity
         this.name = name;
     }
 
-    public Date getDate()
+    public LocalDateTime getDate()
     {
         return date;
     }
 
-    public void setDate(Date date)
+    public void setDate(LocalDateTime date)
     {
         this.date = date;
     }
