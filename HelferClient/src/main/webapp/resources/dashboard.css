@@ -231,3 +231,10 @@ tr:hover {
     color: gray; /* Hover color */
     cursor: pointer; /* Pointer cursor on hover */
 }
+
+.no-events-message {
+    font-size: 18px;
+    color: gray;
+    text-align: center;
+    margin-top: 20px;
+}

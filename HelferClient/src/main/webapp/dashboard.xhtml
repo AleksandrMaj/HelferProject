@@ -102,12 +102,30 @@
                     <h2>Meine Events</h2>
                     <p class="subtext">als Mitglied</p>
                 </h:panelGroup>
-                <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">
-                    <h:column>
-                        <f:facet name="header">Eventname</f:facet>
-                        #{myEvent.name}
-                    </h:column>
-                </h:dataTable>
+
+                <h:form>
+                    <!-- Message displayed when there are no events -->
+                    <h:panelGroup rendered="#{!dashboardMB.hasEvents()}">
+                        <p class="no-events-message">Noch keine Events</p>
+                    </h:panelGroup>
+
+                    <!-- Event table displayed when there are events -->
+                    <h:panelGroup rendered="#{dashboardMB.hasEvents()}">
+                        <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">
+                            <h:column>
+                                <f:facet name="header">Eventname</f:facet>
+                                #{myEvent.name}
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </h:form>
+
+<!--                <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">-->
+<!--                    <h:column>-->
+<!--                        <f:facet name="header">Eventname</f:facet>-->
+<!--                        #{myEvent.name}-->
+<!--                    </h:column>-->
+<!--                </h:dataTable>-->
             </div>
         </div>
     </h:form>

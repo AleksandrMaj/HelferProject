@@ -84,6 +84,10 @@ public class DashboardMB {
         }
     }
 
+    public boolean hasEvents() {
+        return myEvents != null && !myEvents.isEmpty();
+    }
+
     // Getter und Setter
     public Event getEvent() {
         return event;
