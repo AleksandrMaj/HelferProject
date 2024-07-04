@@ -107,7 +107,8 @@ header {
 
 .button-container {
     display: flex;
-    margin-left: 20px
+    margin-left: 20px;
+    align-items: center;
 }
 
 .button-container form {
@@ -260,6 +261,18 @@ header {
 
 .modal-content .create-button:hover {
     background-color: darkseagreen;
+}
+
+.no-helpers-message {
+    font-size: 18px;
+    color: gray;
+    margin-top: 20px;
+}
+
+.warning-message {
+    color: darkorange;
+    font-weight: bold;
+    margin-left: 10px;
 }
 
 #jakarta_faces_developmentstage_messages {

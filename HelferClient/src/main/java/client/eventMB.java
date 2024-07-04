@@ -132,6 +132,17 @@ public class eventMB implements Serializable
         return selectedEvent.getHelferListe().stream().anyMatch(helper -> helper.getId() == userSession.getLoggedInUser().getId());
     }
 
+    public boolean hasHelpers() {
+        return selectedEvent != null && !selectedEvent.getHelferListe().isEmpty();
+    }
+
+    public boolean isEventWithinSevenDays() {
+        if (selectedEvent != null && selectedEvent.getDate() != null) {
+            return selectedEvent.getDate().isBefore(LocalDateTime.now().plusDays(7));
+        }
+        return false;
+    }
+
     public String getHelferButtonText() {
         return isHelfer() ? "Ausschreiben" : "Einschreiben";
     }
