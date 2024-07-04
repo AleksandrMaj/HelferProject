@@ -23,32 +23,39 @@ public class AnmeldenMB
     private String username;
     private String password;
 
+
     // Getter und Setter
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     // Login-Method
     public String login()
     {
+        FacesContext context = FacesContext.getCurrentInstance();
         Client client = ClientBuilder.newClient();
         WebTarget request = client.target(Environment.BASE + "/auth/login");
+
+        if (username == null || !username.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ungültiges E-Mail Format", null));
+            return "";
+        }
+        if (password == null || password.isEmpty()) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Bitte geben Sie ein Passwort ein", null));
+            return "";
+        }
 
         Benutzer loginRequest = new Benutzer();
         loginRequest.setEmail(username);
@@ -69,7 +76,7 @@ public class AnmeldenMB
         if (response.getStatus() != 200)
         {
             String errorMessage = "E-Mail oder Passwort falsch";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
         }
         return "";
     }

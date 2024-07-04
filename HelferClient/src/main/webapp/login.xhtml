@@ -3,23 +3,33 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title> Willkommen - Login</title>
+    <title>Willkommen - Login</title>
     <h:outputStylesheet name="login.css"/>
+    <style>
+        /* Add styles for invalid input fields */
+        .invalid {
+            border-color: red;
+        }
+    </style>
 </h:head>
 <h:body>
     <h:form>
         <div class="login-container">
             <h2>EventMaster</h2>
             <h3>Login</h3>
+
+            <!-- Email Field with Validation -->
             <h:inputText id="username" value="#{anmeldenMB.username}">
                 <f:passThroughAttribute name="placeholder" value="E-Mail"/>
             </h:inputText>
+
+            <!-- Password Field with Validation -->
             <h:inputSecret id="password" value="#{anmeldenMB.password}">
                 <f:passThroughAttribute name="placeholder" value="Passwort"/>
             </h:inputSecret>
+
             <h:commandButton value="Einloggen" action="#{anmeldenMB.login}" styleClass="login-button"/>
-            <h:commandButton value="Neues Konto anlegen" action="register.xhtml?faces-redirect=true"
-                             styleClass="register-button"/>
+            <h:commandButton value="Neues Konto anlegen" action="register.xhtml?faces-redirect=true" styleClass="register-button"/>
             <h:messages globalOnly="true" styleClass="error-message"/>
         </div>
     </h:form>
