@@ -4,8 +4,6 @@ import core.entities.Adresse;
 import core.entities.Benutzer;
 import core.enums.Benutzergruppe;
 
-import java.util.List;
-
 public record BenutzerTO(
         int id,
         String name,

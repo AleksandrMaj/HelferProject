@@ -13,6 +13,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.regex.Pattern;
+
 @Path("/auth")
 public class ServicesBenutzer
 {
@@ -22,6 +24,10 @@ public class ServicesBenutzer
     private IRegistrieren registrieren;
     @Inject
     private Authentication authentication;
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+    );
 
     @POST
     @Path("/login")
@@ -59,6 +65,14 @@ public class ServicesBenutzer
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(BenutzerTO newUser)
     {
+        if (!isValidUserAccount(newUser))
+        {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Ungültige Daten für Registrierung")
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+
         try
         {
             Benutzer user = registrieren.neuenBenutzerRegistrieren(newUser.toBenutzer());
@@ -80,5 +94,15 @@ public class ServicesBenutzer
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
+    }
+
+    private boolean isValidUserAccount(BenutzerTO user)
+    {
+        if (user.name() == null || user.name().trim().isEmpty()) return false;
+        if (user.vorname() == null || user.vorname().trim().isEmpty()) return false;
+        if (user.adresse() == null) return false;
+        if (user.benutzergruppe() == null) return false;
+        if (!EMAIL_PATTERN.matcher(user.email()).matches()) return false;
+        return user.passwort() != null && !user.passwort().trim().isEmpty();
     }
 }

@@ -3,8 +3,6 @@ package client;
 import entities.Event;
 import enums.Benutzergruppe;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.View;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -27,7 +25,7 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class eventMB implements Serializable
+public class EventMB implements Serializable
 {
     private Client client;
     private WebTarget target;
@@ -41,7 +39,7 @@ public class eventMB implements Serializable
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy | HH:mm");
 
-    public eventMB() {
+    public EventMB() {
         client = ClientBuilder.newClient();
         target = client.target(Environment.BASE + "/event");
         selectedEvent = new Event();

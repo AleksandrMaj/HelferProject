@@ -27,25 +27,25 @@
                 <h1>Mein Profil</h1>
                 <div class="profile-grid">
                     <label>Vorname:</label>
-                    <div class="value">#{userSession.loggedInUser.vorname}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.vorname}</div>
 
                     <label>Nachname:</label>
-                    <div class="value">#{userSession.loggedInUser.name}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.name}</div>
 
                     <label>E-Mail:</label>
-                    <div class="value">#{userSession.loggedInUser.email}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.email}</div>
 
                     <label>Postleitzahl:</label>
-                    <div class="value">#{userSession.loggedInUser.adresse.plz}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.adresse.plz}</div>
 
                     <label>Stadt:</label>
-                    <div class="value">#{userSession.loggedInUser.adresse.stadt}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.adresse.stadt}</div>
 
                     <label>Straße:</label>
-                    <div class="value">#{userSession.loggedInUser.adresse.strasse}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.adresse.strasse}</div>
 
                     <label>Hausnummer:</label>
-                    <div class="value">#{userSession.loggedInUser.adresse.hausnummer}</div>
+                    <div class="value">#{profileMB.userSession.loggedInUser.adresse.hausnummer}</div>
                     <!-- Weitere Profilinformationen hier -->
                 </div>
             </div>
@@ -53,7 +53,7 @@
         <!-- Abmelde funktion -->
     </h:form>
     <h:form id="logoutForm">
-        <h:commandLink id="logout" action="#{userSession.logout}" style="display:none"/>
+        <h:commandLink id="logout" action="#{profileMB.userSession.logout}" style="display:none"/>
     </h:form>
 </h:body>
 </html>

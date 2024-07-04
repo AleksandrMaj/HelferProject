@@ -5,7 +5,6 @@ import core.entities.Event;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
