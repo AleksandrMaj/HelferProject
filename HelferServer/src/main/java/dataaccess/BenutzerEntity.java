@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Benutzer")
@@ -33,7 +34,7 @@ public class BenutzerEntity implements Serializable
 
     private String passwort;
 
-    @ManyToMany(mappedBy = "helferListe", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "helferListe", fetch = FetchType.EAGER)
     private List<EventEntity> events;
 
     public BenutzerEntity()
@@ -174,5 +175,19 @@ public class BenutzerEntity implements Serializable
                 }).toList());
 
         return benutzer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BenutzerEntity that = (BenutzerEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id;
     }
 }

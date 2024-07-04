@@ -6,6 +6,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.List;
+
 @Singleton
 public class BenutzerDAO
 {
@@ -19,10 +21,20 @@ public class BenutzerDAO
         query.setParameter("password", password);
 
         try {
-            return query.getSingleResult().toBenutzer();
+            BenutzerEntity user = query.getSingleResult();
+            user.setEvents(findEventsByHelper(user.getId()));
+            return user.toBenutzer();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private List<EventEntity> findEventsByHelper(int userId) {
+        TypedQuery<EventEntity> query = em.createQuery(
+                "SELECT e FROM EventEntity e JOIN e.helferListe h WHERE h.id = :userId", EventEntity.class);
+        query.setParameter("userId", userId);
+
+        return query.getResultList();
     }
 
     public Benutzer findById(int id) {

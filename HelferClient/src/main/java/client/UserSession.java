@@ -36,6 +36,8 @@ public class UserSession implements Serializable {
 
     public String logout()
     {
+        loggedInUser = null;
+        token = null;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "login?faces-redirect=true";
     }

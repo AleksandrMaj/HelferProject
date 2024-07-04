@@ -6,6 +6,7 @@ import jakarta.ejb.Singleton;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class EventDAO
     {
         EventEntity eventEntity = new EventEntity(event);
         em.persist(eventEntity);
+        em.flush();
         return event;
     }
 
@@ -36,7 +38,7 @@ public class EventDAO
         return eventEntity != null ? eventEntity.toEvent() : null;
     }
 
-
+    @Transactional
     public Event modifyEvent(Event event)
     {
         EventEntity eventEntity = em.find(EventEntity.class, event.getId());
@@ -46,6 +48,7 @@ public class EventDAO
             eventEntity.setDate(event.getDate());
 
             em.merge(eventEntity);
+            em.flush();
             return eventEntity.toEvent();
         }
         throw new IllegalArgumentException("Kein Event gefunden mit der ID: " + event.getId());
@@ -57,11 +60,13 @@ public class EventDAO
         if (eventEntity != null)
         {
             em.remove(eventEntity);
+            em.flush();
             return true;
         }
         return false;
     }
 
+    @Transactional
     public boolean addHelfer(int eventID, Benutzer user)
     {
         EventEntity eventEntity = em.find(EventEntity.class, eventID);
@@ -69,13 +74,18 @@ public class EventDAO
         BenutzerEntity benutzerEntity = new BenutzerEntity(user);
         if (!eventEntity.getHelferListe().contains(benutzerEntity))
         {
-            eventEntity.getHelferListe().add(benutzerEntity);
+            List<BenutzerEntity> modifiedHelperList = eventEntity.getHelferListe();
+            modifiedHelperList.add(benutzerEntity);
+            eventEntity.setHelferListe(modifiedHelperList);
+
             em.merge(eventEntity);
+            em.flush();
             return true;
         }
         return false;
     }
 
+    @Transactional
     public boolean removeHelfer(int eventID, Benutzer user)
     {
         EventEntity eventEntity = em.find(EventEntity.class, eventID);
@@ -90,8 +100,12 @@ public class EventDAO
         }
 
         if (helperToRemove != null) {
-            eventEntity.getHelferListe().remove(helperToRemove);
+            List<BenutzerEntity> modifiedHelperList = eventEntity.getHelferListe();
+            modifiedHelperList.remove(helperToRemove);
+            eventEntity.setHelferListe(modifiedHelperList);
+
             em.merge(eventEntity);
+            em.flush();
             return true;
         }
         return false;

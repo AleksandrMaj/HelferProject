@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Event")
@@ -21,7 +22,7 @@ public class EventEntity
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime date;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "Helfer",
             joinColumns = @JoinColumn(name = "eventID"),
@@ -128,5 +129,19 @@ public class EventEntity
         event.setHelferListe(userList);
 
         return event;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EventEntity that = (EventEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id;
     }
 }
