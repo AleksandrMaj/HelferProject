@@ -71,6 +71,11 @@ public class DashboardMB {
     }
 
     public String createEvent() {
+        if (event.getDate().isBefore(LocalDateTime.now())) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Das Ereignisdatum liegt in der Vergangenheit", null));
+            return null;
+        }
+
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
