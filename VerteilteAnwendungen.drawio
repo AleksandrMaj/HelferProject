@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-07-04T16:48:13.095Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="etm0MvUTHV_gaZJ-_0tc" version="24.6.4" type="device" pages="2">
+<mxfile host="app.diagrams.net" modified="2024-07-04T17:04:47.527Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="rhKeQh9xiJlk4ZcFCdXD" version="24.6.4" type="device" pages="2">
   <diagram name="Entwurf-V1" id="Eqmvniv_czIGo2SpjLZo">
     <mxGraphModel dx="2440" dy="2470" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -240,7 +240,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="Entwurf-V2" id="1Npog2pikQQUtydd2W9N">
-    <mxGraphModel dx="2963" dy="2749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2049" dy="2235" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="MgTh_xGjD-fC5ZnC5StQ-0" />
         <mxCell id="MgTh_xGjD-fC5ZnC5StQ-1" parent="MgTh_xGjD-fC5ZnC5StQ-0" />

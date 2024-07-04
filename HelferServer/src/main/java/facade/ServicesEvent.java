@@ -12,6 +12,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Path("/event")
@@ -38,10 +39,16 @@ public class ServicesEvent
         if (user.getBenutzergruppe() != Benutzergruppe.ORGANISATOR)
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-        if (event == null)
+        if (event == null || event.name().isEmpty())
         {
             return Response.status(Response.Status.BAD_REQUEST).entity("Event-Daten sind erforderlich").build();
         }
+
+        if (event.date().isBefore(LocalDateTime.now()))
+        {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Das Event-Datum darf nicht in der Vergangenheit liegen").build();
+        }
+
         try
         {
             Event newEvent = event.toEvent();
@@ -117,8 +124,11 @@ public class ServicesEvent
         if (!authentication.tokenIsValid(token))
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
-        if (modifiedEventTO.id() == 0)
-            return Response.status(Response.Status.BAD_REQUEST).entity("Event-ID ist für die Aktualisierung erforderlich").build();
+        if (modifiedEventTO == null || modifiedEventTO.name().isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).entity("Event-Daten sind erforderlich").build();
+
+        if (modifiedEventTO.date().isBefore(LocalDateTime.now()))
+            return Response.status(Response.Status.BAD_REQUEST).entity("Das Event-Datum darf nicht in der Vergangenheit liegen").build();
 
         Benutzer user = authentication.getUserFromToken(token);
         Event modifiedEvent = modifiedEventTO.toEvent();
@@ -173,7 +183,7 @@ public class ServicesEvent
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
         Benutzer user = authentication.getUserFromToken(token);
-        if(user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR)
+        if (user.getBenutzergruppe() == Benutzergruppe.ORGANISATOR)
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nicht autorisiert").build();
 
         Event event = eventsVerwalten.getEventById(id);
