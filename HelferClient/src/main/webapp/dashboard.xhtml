@@ -18,6 +18,8 @@
 </h:head>
 <h:body>
     <h:form id="mainForm">
+
+        <!-- Header mit Profil und Dropdown-Kontent -->
         <header>
             <h1>EventMaster</h1>
             <div class="profile-menu">
@@ -29,16 +31,21 @@
             </div>
         </header>
 
+        <!-- Hauptkontent mit allen Funktionalitäten vom Dashboard -->
         <div class="container">
             <div class="main-content">
+
+                <!-- Button für Eventhinzufügen gerendert für Organisator -->
                 <div class="event-list-title">
                     <h2>Eventliste</h2>
                     <h:panelGroup rendered="#{userSession.isOrganisator()}">
-                        <button type="button" class="create-button open-create-event" onclick="showModal()">Event hinzufügen</button>
+                        <button type="button" class="create-button open-create-event"
+                                onclick="showModal()">Event hinzufügen
+                        </button>
                     </h:panelGroup>
                 </div>
 
-                <!-- Popup -->
+                <!-- Popup wenn man auf Eventhinzufügen drückt mit allen wichtigen Funktionen-->
                 <div id="myModal" class="modal">
                     <div class="modal-content">
                         <span class="close" onclick="closeModal()">×</span>
@@ -61,6 +68,7 @@
                     </div>
                 </div>
 
+                <!-- Die Eventtabele mit den gefetchten Daten der Evente -->
                 <h:dataTable value="#{dashboardMB.events}" var="event" styleClass="event-table" border="1">
                     <h:column>
                         <f:facet name="header">Nr</f:facet>
@@ -89,6 +97,8 @@
                     </h:column>
                 </h:dataTable>
             </div>
+
+            <!-- Weitere Eventtabele mit Events die einer Person zugeordnet sind-->
             <div class="sidebar">
                 <h:panelGroup rendered="#{userSession.isOrganisator()}">
                     <h2>Meine Events</h2>
@@ -99,6 +109,7 @@
                     <p class="subtext">als Mitglied</p>
                 </h:panelGroup>
 
+                <!-- Funktionalität der Sidebar Tabelle-->
                 <h:form>
                     <h:panelGroup rendered="#{!dashboardMB.hasEvents()}">
                         <p class="no-events-message">Noch keine Events</p>
@@ -108,7 +119,10 @@
                         <h:dataTable value="#{dashboardMB.myEvents}" var="myEvent" styleClass="event-table" border="1">
                             <h:column>
                                 <f:facet name="header">Eventname</f:facet>
-                                #{myEvent.name}
+                                <h:link outcome="event.xhtml" styleClass="event-link">
+                                    <f:param name="eventId" value="#{myEvent.id}"/>
+                                    #{myEvent.name}
+                                </h:link>
                             </h:column>
                         </h:dataTable>
                     </h:panelGroup>

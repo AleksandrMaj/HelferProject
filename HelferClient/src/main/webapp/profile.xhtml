@@ -6,6 +6,7 @@
     <h:outputStylesheet name="profil.css"/>
 </h:head>
 <h:body>
+    <!-- Header mit Profil und Dropdownkontent-->
     <header>
         <h1>EventMaster</h1>
         <div class="profile-menu">
@@ -19,8 +20,9 @@
         </div>
     </header>
     <h:form>
+        <!-- Hier werden die Daten vom angemeldeten Nutzer wiedergegeben-->
         <div class="main-container">
-            <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
+            <a class="back-link" href="dashboard.xhtml">← Zurück zur Liste</a>
             <div class="container">
                 <h1>Mein Profil</h1>
                 <div class="profile-grid">
@@ -48,6 +50,7 @@
                 </div>
             </div>
         </div>
+        <!-- Abmelde funktion -->
     </h:form>
     <h:form id="logoutForm">
         <h:commandLink id="logout" action="#{userSession.logout}" style="display:none"/>
