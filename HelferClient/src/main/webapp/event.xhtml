@@ -92,11 +92,11 @@
             <h:form>
                 <div class="form-field">
                     <h:outputLabel for="eventName" value="Event Name:"/>
-                    <h:inputText id="eventName" value="#{eventMB.selectedEvent.name}" styleClass="form-control"/>
+                    <h:inputText id="eventName" value="#{eventMB.modifiedEvent.name}" styleClass="form-control"/>
                 </div>
                 <div class="form-field">
                     <h:outputLabel for="datetime" value="Termin:"/>
-                    <h:inputText id="datetime" value="#{eventMB.selectedEvent.date}" type="datetime-local"
+                    <h:inputText id="datetime" value="#{eventMB.modifiedEvent.date}" type="datetime-local"
                                  styleClass="form-control">
                         <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd'T'HH:mm"/>
                     </h:inputText>

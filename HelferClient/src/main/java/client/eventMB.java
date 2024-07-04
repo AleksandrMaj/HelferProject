@@ -32,6 +32,7 @@ public class eventMB implements Serializable
     private Client client;
     private WebTarget target;
     private Event selectedEvent;
+    private Event modifiedEvent = new Event();
 
     private int eventID;
 
@@ -72,12 +73,23 @@ public class eventMB implements Serializable
 
         if (response.getStatus() == 200) {
             selectedEvent = response.readEntity(new GenericType<Event>() {});
+            modifiedEvent.setDate(selectedEvent.getDate());
+            modifiedEvent.setName(selectedEvent.getName());
+
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Laden der Events", null));
         }
     }
 
     public String updateEvent() {
+        if (modifiedEvent.getDate().isBefore(LocalDateTime.now())) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Das Ereignisdatum liegt in der Vergangenheit", null));
+            return null;
+        }
+
+        selectedEvent.setDate(modifiedEvent.getDate());
+        selectedEvent.setName(modifiedEvent.getName());
+
         Response response = target
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authentication", userSession.getToken())
@@ -174,5 +186,15 @@ public class eventMB implements Serializable
     public void setEventID(int eventID)
     {
         this.eventID = eventID;
+    }
+
+    public Event getModifiedEvent()
+    {
+        return modifiedEvent;
+    }
+
+    public void setModifiedEvent(Event modifiedEvent)
+    {
+        this.modifiedEvent = modifiedEvent;
     }
 }

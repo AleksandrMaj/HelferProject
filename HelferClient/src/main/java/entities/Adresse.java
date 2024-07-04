@@ -5,10 +5,10 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class Adresse
 {
-    private String strasse;
-    private String hausnummer;
-    private String stadt;
-    private String plz;
+    private String strasse = "";
+    private String hausnummer = "";
+    private String stadt = "";
+    private String plz = "";
 
     public String getStrasse()
     {
@@ -48,5 +48,9 @@ public class Adresse
     public void setPlz(String plz)
     {
         this.plz = plz;
+    }
+
+    public boolean isFilled() {
+        return !strasse.isEmpty() && !hausnummer.isEmpty() && !stadt.isEmpty() && !plz.isEmpty();
     }
 }
