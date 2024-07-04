@@ -61,7 +61,4 @@ VALUES ('Sample Event 1', '2024-06-26 10:00:00', 1),
 INSERT INTO Helfer (eventID, benutzerID)
 VALUES (1, 2),
        (1, 3),
-       (2, 1),
-       (2, 4),
-       (3, 2),
        (3, 3);
