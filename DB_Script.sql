@@ -1,6 +1,3 @@
--- Drop table Benutzer if exists (Apache Derby doesn't support IF EXISTS directly)
--- Make sure to drop the table manually or use your DB management tool to drop it before running this script
-
 DROP TABLE Helfer;
 DROP TABLE Event;
 DROP TABLE Benutzer;
@@ -61,11 +58,10 @@ VALUES ('Sample Event 1', '2024-06-26 10:00:00', 1),
        ('Sample Event 3', '2024-08-05 09:30:00', 4);
 
 -- Insert a sample Event
-/*INSERT INTO Helfer (eventID, benutzerID)
+INSERT INTO Helfer (eventID, benutzerID)
 VALUES (1, 2),
        (1, 3),
        (2, 1),
        (2, 4),
        (3, 2),
        (3, 3);
-*/
