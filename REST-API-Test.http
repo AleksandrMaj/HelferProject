@@ -1,11 +1,30 @@
+### Register Endpoint
+POST http://localhost:8080/HelferServer/webapi/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Bob",
+  "vorname": "Dieter",
+  "adresse": {
+    "strasse": "Example Street",
+    "hausnummer": 22,
+    "stadt": "Example City",
+    "plz": "12345"
+  },
+  "benutzergruppe": "MITGLIED",
+  "email": "abc@gmail.com",
+  "passwort": "SecurePass123!"
+}
+
 ### Test the login endpoint (WORKING)
 POST http://localhost:8080/HelferServer/webapi/auth/login
 Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "alexandermay02@gmail.com",
-  "passwort": "123"
+  "email": "abc@gmail.com",
+  "passwort": "SecurePass123!"
 }
 
 ### Test the create event endpoint (WORKING)
