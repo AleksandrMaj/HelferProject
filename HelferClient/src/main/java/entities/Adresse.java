@@ -49,4 +49,8 @@ public class Adresse
     {
         this.plz = plz;
     }
+
+    public boolean isFilled() {
+        return !strasse.isEmpty() && !hausnummer.isEmpty() && !stadt.isEmpty() && !plz.isEmpty();
+    }
 }

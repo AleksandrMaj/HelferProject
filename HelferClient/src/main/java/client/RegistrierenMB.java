@@ -8,6 +8,13 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -22,16 +29,29 @@ import java.util.List;
 @RequestScoped
 public class RegistrierenMB
 {
+    @NotNull(message = "Vorname ist erforderlich")
+    @Size(min = 1, message = "Vorname ist erforderlich")
     private String vorname;
+
+    @NotNull(message = "Name ist erforderlich")
+    @Size(min = 1, message = "Name ist erforderlich")
     private String name;
+
+    @NotNull(message = "E-Mail ist erforderlich")
+    @Email(message = "Ungültige E-Mail-Adresse")
     private String email;
+
+    @NotNull(message = "Passwort ist erforderlich")
+    @Size(min = 1, message = "Passwort ist erforderlich")
     private String password;
+
     private final Adresse adresse = new Adresse();
     private Benutzergruppe benutzergruppe;
     private List<Benutzergruppe> benutzergruppen;
 
     @PostConstruct
-    public void init() {
+    public void init()
+    {
         // Initialize benutzergruppen with enum values
         benutzergruppen = Arrays.asList(Benutzergruppe.values());
     }
@@ -82,20 +102,31 @@ public class RegistrierenMB
         return adresse;
     }
 
-    public List<Benutzergruppe> getBenutzergruppen() {
+    public List<Benutzergruppe> getBenutzergruppen()
+    {
         return benutzergruppen;
     }
 
-    public Benutzergruppe getBenutzergruppe() {
+    public Benutzergruppe getBenutzergruppe()
+    {
         return benutzergruppe;
     }
 
-    public void setBenutzergruppe(Benutzergruppe benutzergruppe) {
+    public void setBenutzergruppe(Benutzergruppe benutzergruppe)
+    {
         this.benutzergruppe = benutzergruppe;
     }
 
     // Register method
-    public String register() {
+    public String register()
+    {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (!adresse.isFilled()) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Adresse notwendig", null));
+            return "";
+        }
+
         Client client = ClientBuilder.newClient();
         WebTarget request = client.target(Environment.BASE + "/auth/register");
 
@@ -112,18 +143,16 @@ public class RegistrierenMB
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(newUser), Response.class);
 
-        if (response.getStatus() == 201) {
-            // Assuming the response contains a JSON object with user details
-            Benutzer registeredUser = response.readEntity(Benutzer.class);
-            // Optionally, store the user information or perform other actions
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung Erfolgreich", null));
+        if (response.getStatus() == 201)
+        {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung Erfolgreich", null));
             return "login?faces-redirect=true";
         }
 
-        if (response.getStatus() != 201){
-            // Handle registration failure
+        if (response.getStatus() != 201)
+        {
             String errorMessage = "Registrierung fehlgeschlagen";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
         }
         return "";
     }

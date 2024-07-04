@@ -5,12 +5,6 @@
 <h:head>
     <title>Willkommen - Login</title>
     <h:outputStylesheet name="login.css"/>
-    <style>
-        /* Add styles for invalid input fields */
-        .invalid {
-            border-color: red;
-        }
-    </style>
 </h:head>
 <h:body>
     <h:form>
@@ -30,7 +24,6 @@
 
             <h:commandButton value="Einloggen" action="#{anmeldenMB.login}" styleClass="login-button"/>
             <h:commandButton value="Neues Konto anlegen" action="register.xhtml?faces-redirect=true" styleClass="register-button"/>
-            <h:messages globalOnly="true" styleClass="error-message"/>
         </div>
     </h:form>
 </h:body>

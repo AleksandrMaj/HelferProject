@@ -6,6 +6,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
+    flex-direction: column;
 }
 
 .registration-container {
@@ -105,5 +106,29 @@ body {
 
 .form-grid .full-width {
     grid-column: span 2;
+    text-align: center;
+}
+
+#jakarta_faces_developmentstage_messages {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 10px;
+    margin-top: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-size: 14px;
+    list-style-type: none;
+    width: calc(100% - 60px);
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+    align-items: center;
+}
+
+#jakarta_faces_developmentstage_messages .li {
     text-align: center;
 }

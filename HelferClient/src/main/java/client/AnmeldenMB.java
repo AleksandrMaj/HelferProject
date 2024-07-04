@@ -6,6 +6,9 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -20,9 +23,13 @@ public class AnmeldenMB
     @Inject
     private UserSession userSession;
 
+    @NotNull(message = "E-Mail ist erforderlich")
+    @Email(message = "Ungültiges E-Mail Format")
     private String username;
-    private String password;
 
+    @NotNull(message = "Passwort ist erforderlich")
+    @Size(min = 1, message = "Passwort ist erforderlich")
+    private String password;
 
     // Getter und Setter
     public String getUsername() {
@@ -47,15 +54,6 @@ public class AnmeldenMB
         FacesContext context = FacesContext.getCurrentInstance();
         Client client = ClientBuilder.newClient();
         WebTarget request = client.target(Environment.BASE + "/auth/login");
-
-        if (username == null || !username.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ungültiges E-Mail Format", null));
-            return "";
-        }
-        if (password == null || password.isEmpty()) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Bitte geben Sie ein Passwort ein", null));
-            return "";
-        }
 
         Benutzer loginRequest = new Benutzer();
         loginRequest.setEmail(username);
