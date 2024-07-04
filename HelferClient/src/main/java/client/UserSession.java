@@ -2,12 +2,10 @@ package client;
 
 import entities.Benutzer;
 import enums.Benutzergruppe;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 @Named

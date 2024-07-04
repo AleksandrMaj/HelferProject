@@ -3,8 +3,6 @@ package client;
 import entities.Event;
 import enums.Benutzergruppe;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.View;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;

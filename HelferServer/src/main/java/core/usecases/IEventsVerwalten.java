@@ -1,6 +1,5 @@
 package core.usecases;
 
-import core.entities.Benutzer;
 import core.entities.Event;
 
 import java.util.List;
