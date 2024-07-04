@@ -31,19 +31,19 @@ public class RegistrierenMB
 {
     @NotNull(message = "Vorname ist erforderlich")
     @Size(min = 1, message = "Vorname ist erforderlich")
-    private String vorname;
+    private String vorname = "";
 
     @NotNull(message = "Name ist erforderlich")
     @Size(min = 1, message = "Name ist erforderlich")
-    private String name;
+    private String name = "";
 
     @NotNull(message = "E-Mail ist erforderlich")
     @Email(message = "Ungültige E-Mail-Adresse")
-    private String email;
+    private String email = "";
 
     @NotNull(message = "Passwort ist erforderlich")
     @Size(min = 1, message = "Passwort ist erforderlich")
-    private String password;
+    private String password = "";
 
     private final Adresse adresse = new Adresse();
     private Benutzergruppe benutzergruppe;

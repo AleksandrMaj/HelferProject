@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "jane.smith@example.com",
-  "passwort": "password789"
+  "email": "alexandermay02@gmail.com",
+  "passwort": "123"
 }
 
 ### Test the create event endpoint (WORKING)
@@ -46,7 +46,7 @@ DELETE http://localhost:8080/HelferServer/webapi/event/3
 Authentication: Bearer NDphY2RmN2M2OC1lMTZhLTRmYjgtYjE1Ni1mMzFjOWE2NWM2ZDE6RXZlbnRNYXN0ZXI=
 
 ### Test the add helfer endpoint
-POST http://localhost:8080/HelferServer/webapi/event/1/helfer
-Authentication: Bearer MzowN2I1NjBmMC00NTQ0LTRkMjYtYjI2Yy0zMTU0Y2I4YjcxNGM6RXZlbnRNYXN0ZXI=
+POST http://localhost:8080/HelferServer/webapi/event/9/helfer
+Authentication: Bearer NTpjNzZiMTNlMi1mMzI1LTRlNzItOTcxNC1kNzE4MzY5YTc1Njk6RXZlbnRNYXN0ZXI=
 Content-Type: application/json
 Accept: application/json

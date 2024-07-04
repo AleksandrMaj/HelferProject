@@ -66,6 +66,9 @@
             <h:panelGroup rendered="#{eventMB.isOwner()}">
                 <div class="helpers-list">
                     <h2>Angemeldete Helfer</h2>
+                    <h:panelGroup rendered="#{!eventMB.hasHelpers()}">
+                        <p class="no-helpers-message">Noch keine Helfer</p>
+                    </h:panelGroup>
                     <ul>
                         <ui:repeat value="#{eventMB.selectedEvent.helferListe}" var="helfer">
                             <li><h:outputText value="#{helfer.name}, #{helfer.vorname}"/></li>
@@ -74,13 +77,16 @@
                 </div>
             </h:panelGroup>
         </div>
-        <!-- Button für ein uns ausschreiben in ein Event-->
+        <!-- Button für ein ein- und ausschreiben in ein Event-->
         <h:panelGroup rendered="#{eventMB.isMitglied()}">
             <div class="button-container">
                 <h:form>
                     <h:commandButton value="#{eventMB.helferButtonText}" action="#{eventMB.toggleHelfer}"
                                      styleClass="#{eventMB.helferButtonText == 'Einschreiben' ? 'helper-button-einschreiben' : 'helper-button-ausschreiben'}"/>
                 </h:form>
+                <h:panelGroup rendered="#{eventMB.helferButtonText == 'Ausschreiben' ? eventMB.eventWithinSevenDays : false}">
+                    <h:outputText value=" | Änderung sehr ungünstig, da das Event weniger als 7 Tage entfernt ist |" styleClass="warning-message" />
+                </h:panelGroup>
             </div>
         </h:panelGroup>
     </div>
