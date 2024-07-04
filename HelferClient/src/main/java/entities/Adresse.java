@@ -5,10 +5,10 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class Adresse
 {
-    private String strasse;
-    private String hausnummer;
-    private String stadt;
-    private String plz;
+    private String strasse = "";
+    private String hausnummer = "";
+    private String stadt = "";
+    private String plz = "";
 
     public String getStrasse()
     {
