@@ -65,7 +65,7 @@ DELETE http://localhost:8080/HelferServer/webapi/event/3
 Authentication: Bearer NDphY2RmN2M2OC1lMTZhLTRmYjgtYjE1Ni1mMzFjOWE2NWM2ZDE6RXZlbnRNYXN0ZXI=
 
 ### Test the add helfer endpoint
-POST http://localhost:8080/HelferServer/webapi/event/9/helfer
-Authentication: Bearer NTpjNzZiMTNlMi1mMzI1LTRlNzItOTcxNC1kNzE4MzY5YTc1Njk6RXZlbnRNYXN0ZXI=
+POST http://localhost:8080/HelferServer/webapi/event/2/helfer
+Authentication: Bearer Nzo3NTliOWRiYy1mMDM5LTQwMGUtYThlYy1iNWU1OTA1MjNhYzY6RXZlbnRNYXN0ZXI=
 Content-Type: application/json
 Accept: application/json

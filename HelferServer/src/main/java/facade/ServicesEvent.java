@@ -76,7 +76,6 @@ public class ServicesEvent
             if (event == null)
                 return Response.status(Response.Status.NOT_FOUND).entity("Event nicht gefunden").build();
 
-            //TODO: CHECK
             event.getOrganisator().anonymizeWithoutName();
             event.getHelferListe().stream().map(helfer ->
             {
@@ -191,6 +190,13 @@ public class ServicesEvent
         if (event == null)
             return Response.status(Response.Status.NOT_FOUND).entity("Kein Event zu dieser ID").build();
 
+        event.getOrganisator().anonymizeWithoutName();
+        event.getHelferListe().stream().map(helfer ->
+        {
+            helfer.anonymizeWithoutName();
+            return helfer;
+        });
+
         if (event.getHelferListe().stream().anyMatch(helfer -> helfer.getId() == user.getId()))
         {
             helferVerwalten.removeHelfer(id, user);
@@ -198,5 +204,5 @@ public class ServicesEvent
         }
         helferVerwalten.addHelfer(id, user);
         return Response.ok(event).build();
-    } //TODO: Anonynmize helferListe
+    }
 }
