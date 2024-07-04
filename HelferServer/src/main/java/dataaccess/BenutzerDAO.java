@@ -29,6 +29,7 @@ public class BenutzerDAO
         }
     }
 
+    //Prevent not correct loading of helper events from a user
     private List<EventEntity> findEventsByHelper(int userId) {
         TypedQuery<EventEntity> query = em.createQuery(
                 "SELECT e FROM EventEntity e JOIN e.helferListe h WHERE h.id = :userId", EventEntity.class);
