@@ -121,7 +121,7 @@ public class eventMB implements Serializable
     }
 
     public String getHelferButtonText() {
-        return isHelfer() ? "Remove as Helper" : "Become a Helper";
+        return isHelfer() ? "Ausschreiben" : "Einschreiben";
     }
 
     public String toggleHelfer() {

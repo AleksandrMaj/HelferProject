@@ -17,6 +17,7 @@
     </script>
 </h:head>
 <h:body>
+    <!-- Header mit Profil und Dropdown Content -->
     <header>
         <h1>EventMaster</h1>
         <div class="profile-menu">
@@ -29,25 +30,30 @@
             </div>
         </div>
     </header>
+
     <div class="main-container">
-        <a class="back-link" href="dashboard.xhtml">Back to Events List</a>
+        <a class="back-link" href="dashboard.xhtml">← Zurück zur Liste</a>
         <div class="container">
             <div class="event-details">
                 <div class="event-header">
                     <h1><h:outputText value="#{eventMB.selectedEvent.name}"/></h1>
+
+                    <!-- Button für löschen und Bearbeiten-->
                     <h:panelGroup rendered="#{eventMB.isOwner()}">
                         <div class="button-container">
                             <h:form>
                                 <h:inputHidden value="#{eventMB.eventID}"/>
-                                <h:commandButton value="Edit" class="edit-button" onclick="openEditModal(); return false;"/>
-                                <h:commandButton value="Delete" action="#{eventMB.deleteEvent}"
+                                <h:commandButton value="Bearbeiten" class="edit-button"
+                                                 onclick="openEditModal(); return false;"/>
+                                <h:commandButton value="Löschen" action="#{eventMB.deleteEvent}"
                                                  styleClass="delete-button"/>
                             </h:form>
                         </div>
                     </h:panelGroup>
                 </div>
+                <!-- Eventdaten fetchen und wiedergeben-->
                 <div class="form-field">
-                    <label>Event Date:</label>
+                    <label>Event Datum:</label>
                     <h:outputText value="#{dashboardMB.formatDateTime(eventMB.selectedEvent.date)}"/>
                 </div>
                 <div class="form-field">
@@ -56,27 +62,29 @@
                             value="#{eventMB.selectedEvent.organisator.name} #{eventMB.selectedEvent.organisator.vorname}"/>
                 </div>
             </div>
+            <!-- Helfer nur für Organisator anzeigen, dem das Event gehört-->
             <h:panelGroup rendered="#{eventMB.isOwner()}">
                 <div class="helpers-list">
-                    <h2>Helpers</h2>
+                    <h2>Angemeldete Helfer</h2>
                     <ul>
-                        <ui:repeat value="#{eventMB.selectedEvent.helferListe}" var="helper">
-                            <li><h:outputText value="#{helper.name}, #{helper.vorname}"/></li>
+                        <ui:repeat value="#{eventMB.selectedEvent.helferListe}" var="helfer">
+                            <li><h:outputText value="#{helfer.name}, #{helfer.vorname}"/></li>
                         </ui:repeat>
                     </ul>
                 </div>
             </h:panelGroup>
         </div>
+        <!-- Button für ein uns ausschreiben in ein Event-->
         <h:panelGroup rendered="#{eventMB.isMitglied()}">
-            <div class="button-container" style="margin-left: 20px">
+            <div class="button-container">
                 <h:form>
                     <h:commandButton value="#{eventMB.helferButtonText}" action="#{eventMB.toggleHelfer}"
-                                     styleClass="helper-button"/>
+                                     styleClass="#{eventMB.helferButtonText == 'Einschreiben' ? 'helper-button-einschreiben' : 'helper-button-ausschreiben'}"/>
                 </h:form>
             </div>
         </h:panelGroup>
     </div>
-
+    <!-- Popup wenn Organisator auf Bearbeitenbutton drückt-->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">×</span>
@@ -94,7 +102,8 @@
                     </h:inputText>
                 </div>
                 <div class="create-button-container">
-                    <h:commandButton value="Update Event" action="#{eventMB.updateEvent}" styleClass="create-button"/>
+                    <h:commandButton value="Änderung speichern" action="#{eventMB.updateEvent}"
+                                     styleClass="create-button"/>
                 </div>
             </h:form>
         </div>
